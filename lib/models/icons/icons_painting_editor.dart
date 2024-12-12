@@ -86,7 +86,7 @@ class IconsPaintingEditor {
     this.moveAndZoom = Icons.pinch_outlined,
     this.changeOpacity = Icons.opacity_outlined,
     this.eraser = Icons.delete_forever_outlined,
-    this.bottomNavBar = Icons.edit_outlined,
+    this.bottomNavBar = Icons.draw_outlined,
     this.lineWeight = Icons.line_weight_rounded,
     this.freeStyle = Icons.edit,
     this.arrow = Icons.arrow_right_alt_outlined,

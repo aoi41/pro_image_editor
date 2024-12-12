@@ -901,13 +901,26 @@ class PaintingEditorState extends State<PaintingEditor>
 
   /// Builds and returns an IconButton for applying changes.
   Widget _buildDoneBtn() {
-    return IconButton(
+    return GestureDetector(
+      onTap: done,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        margin: const EdgeInsets.only(right: 15),
+        decoration: BoxDecoration(
+            color: const Color(0xFF3FC2A6),
+            borderRadius: BorderRadius.circular(8)),
+        child: Text(
+          i18n.done,
+          style: const TextStyle(fontSize: 10.0, color: Colors.white),
+        ),
+      ),
+    )/*IconButton(
       tooltip: i18n.paintEditor.done,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       icon: Icon(icons.applyChanges),
       iconSize: 28,
       onPressed: done,
-    );
+    )*/;
   }
 
   /// Builds the main body of the painting editor.

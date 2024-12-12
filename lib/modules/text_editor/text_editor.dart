@@ -540,14 +540,28 @@ class TextEditorState extends State<TextEditor>
 
   /// Builds and returns an IconButton for applying changes.
   Widget _buildDoneBtn() {
-    return IconButton(
+    return GestureDetector(
+      onTap: done,
+      child: Container(
+        key: const ValueKey('TextEditorDoneButton'),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        margin: const EdgeInsets.only(right: 15),
+        decoration: BoxDecoration(
+            color: const Color(0xFF3FC2A6),
+            borderRadius: BorderRadius.circular(8)),
+        child: Text(
+          i18n.done,
+          style: const TextStyle(fontSize: 10.0, color: Colors.white),
+        ),
+      ),
+    )/*IconButton(
       key: const ValueKey('TextEditorDoneButton'),
       tooltip: i18n.textEditor.done,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       icon: Icon(icons.applyChanges),
       iconSize: 28,
       onPressed: done,
-    );
+    )*/;
   }
 
   Widget _buildColorPicker() {

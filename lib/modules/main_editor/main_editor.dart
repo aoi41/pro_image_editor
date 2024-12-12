@@ -1858,14 +1858,26 @@ class ProImageEditorState extends State<ProImageEditor>
                             PlatformCircularProgressIndicator(configs: configs),
                       ),
                     )
-                  : IconButton(
+                  : /*IconButton(
                       key: const ValueKey('MainEditorDoneButton'),
                       tooltip: i18n.done,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       icon: Icon(icons.doneIcon),
                       iconSize: 28,
                       onPressed: doneEditing,
-                    ),
+                    ),*/
+                    Container(
+                      key: const ValueKey('MainEditorDoneButton'),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      margin: const EdgeInsets.only(right: 15),
+                      decoration: BoxDecoration(
+                          color: const Color(0xFF3FC2A6),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Text(
+                        i18n.send,
+                        style: const TextStyle(fontSize: 10.0, color: Colors.white),
+                      ),
+                    )
             ],
           );
   }

@@ -245,13 +245,27 @@ class BlurEditorState extends State<BlurEditor>
           onPressed: close,
         ),
         const Spacer(),
-        IconButton(
+        /*IconButton(
           tooltip: i18n.blurEditor.done,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           icon: Icon(icons.applyChanges),
           iconSize: 28,
           onPressed: done,
-        ),
+        ),*/
+        GestureDetector(
+          onTap: done,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            margin: const EdgeInsets.only(right: 15),
+            decoration: BoxDecoration(
+                color: const Color(0xFF3FC2A6),
+                borderRadius: BorderRadius.circular(8)),
+            child: Text(
+              i18n.done,
+              style: const TextStyle(fontSize: 10.0, color: Colors.white),
+            ),
+          ),
+        )
       ],
     );
   }

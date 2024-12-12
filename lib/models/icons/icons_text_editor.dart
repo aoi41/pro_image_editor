@@ -48,7 +48,7 @@ class IconsTextEditor {
   /// )
   /// ```
   const IconsTextEditor({
-    this.bottomNavBar = Icons.title_rounded,
+    this.bottomNavBar = Icons.format_shapes_outlined,
     this.alignLeft = Icons.align_horizontal_left_rounded,
     this.alignCenter = Icons.align_horizontal_center_rounded,
     this.alignRight = Icons.align_horizontal_right_rounded,

@@ -149,6 +149,9 @@ class I18n {
   /// Text for the "Done" action.
   final String done;
 
+  /// Text for the "Send" action.
+  final String send;
+
   /// Text for the "Remove" action.
   final String remove;
 
@@ -201,6 +204,7 @@ class I18n {
     this.undo = 'Undo',
     this.redo = 'Redo',
     this.done = 'Done',
+    this.send = 'Send',
     this.remove = 'Remove',
     this.doneLoadingMsg = 'Changes are being applied',
   });
