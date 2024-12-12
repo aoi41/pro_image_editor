@@ -1866,16 +1866,19 @@ class ProImageEditorState extends State<ProImageEditor>
                       iconSize: 28,
                       onPressed: doneEditing,
                     ),*/
-                    Container(
-                      key: const ValueKey('MainEditorDoneButton'),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      margin: const EdgeInsets.only(right: 15),
-                      decoration: BoxDecoration(
-                          color: const Color(0xFF3FC2A6),
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Text(
-                        i18n.send,
-                        style: const TextStyle(fontSize: 10.0, color: Colors.white),
+                    GestureDetector(
+                      onTap: doneEditing,
+                      child: Container(
+                        key: const ValueKey('MainEditorDoneButton'),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        margin: const EdgeInsets.only(right: 15),
+                        decoration: BoxDecoration(
+                            color: const Color(0xFF3FC2A6),
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Text(
+                          i18n.send,
+                          style: const TextStyle(fontSize: 10.0, color: Colors.white),
+                        ),
                       ),
                     )
             ],
