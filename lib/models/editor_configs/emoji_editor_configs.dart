@@ -21,21 +21,6 @@ export 'package:emoji_picker_flutter/emoji_picker_flutter.dart'
 /// );
 /// ```
 class EmojiEditorConfigs {
-  /// Creates an instance of EmojiEditorConfigs with optional settings.
-  ///
-  /// By default, the editor is enabled, and other properties are set to
-  /// reasonable defaults.
-  const EmojiEditorConfigs({
-    this.enabled = true,
-    this.initScale = 5.0,
-    this.minScale = double.negativeInfinity,
-    this.maxScale = double.infinity,
-    this.checkPlatformCompatibility = true,
-    this.emojiSet = defaultEmojiSet,
-  })  : assert(initScale > 0, 'initScale must be positive'),
-        assert(maxScale >= minScale,
-            'maxScale must be greater than or equal to minScale');
-
   /// Indicates whether the emoji editor is enabled.
   final bool enabled;
 
@@ -54,28 +39,18 @@ class EmojiEditorConfigs {
   /// The maximum scale factor from the layer.
   final double maxScale;
 
-  /// Creates a copy of this `EmojiEditorConfigs` object with the given fields
-  /// replaced with new values.
+  /// Creates an instance of EmojiEditorConfigs with optional settings.
   ///
-  /// The [copyWith] method allows you to create a new instance of
-  /// [EmojiEditorConfigs] with some properties updated while keeping the
-  /// others unchanged.
-  EmojiEditorConfigs copyWith({
-    bool? enabled,
-    double? initScale,
-    bool? checkPlatformCompatibility,
-    List<CategoryEmoji>? emojiSet,
-    double? minScale,
-    double? maxScale,
-  }) {
-    return EmojiEditorConfigs(
-      enabled: enabled ?? this.enabled,
-      initScale: initScale ?? this.initScale,
-      checkPlatformCompatibility:
-          checkPlatformCompatibility ?? this.checkPlatformCompatibility,
-      emojiSet: emojiSet ?? this.emojiSet,
-      minScale: minScale ?? this.minScale,
-      maxScale: maxScale ?? this.maxScale,
-    );
-  }
+  /// By default, the editor is enabled, and other properties are set to
+  /// reasonable defaults.
+  const EmojiEditorConfigs({
+    this.enabled = true,
+    this.initScale = 5.0,
+    this.minScale = double.negativeInfinity,
+    this.maxScale = double.infinity,
+    this.checkPlatformCompatibility = true,
+    this.emojiSet = defaultEmojiSet,
+  })  : assert(initScale > 0, 'initScale must be positive'),
+        assert(maxScale >= minScale,
+            'maxScale must be greater than or equal to minScale');
 }

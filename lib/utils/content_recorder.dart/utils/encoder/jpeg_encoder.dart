@@ -1,5 +1,5 @@
 // Dart imports:
-// ignore_for_file: implementation_imports, public_member_api_docs
+// ignore_for_file: implementation_imports
 
 // Dart imports:
 import 'dart:async';
@@ -44,11 +44,11 @@ class JpegHealthyEncoder {
     Image image, {
     JpegChroma chroma = JpegChroma.yuv444,
     bool singleFrame = false,
-    Completer<void>? destroy$,
+    Completer? destroy$,
   }) async {
     final fp = OutputBuffer(bigEndian: true);
 
-    Future<void> healthCheck() async {
+    Future healthCheck() async {
       await Future.delayed(const Duration(microseconds: 10));
       if (destroy$?.isCompleted == true) {
         throw ArgumentError('Kill encode jpg');

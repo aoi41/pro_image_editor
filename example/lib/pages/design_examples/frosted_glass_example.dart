@@ -5,24 +5,22 @@ import 'dart:math';
 import 'package:example/widgets/demo_build_stickers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pro_image_editor/designs/frosted_glass/frosted_glass.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
+import 'package:pro_image_editor/designs/frosted_glass/frosted_glass.dart';
 
 // Project imports:
 import '../../utils/example_helper.dart';
 
-/// The frosted glass design example
 class FrostedGlassExample extends StatefulWidget {
-  /// Creates a new [FrostedGlassExample] widget.
+  final String url;
+
   const FrostedGlassExample({
     super.key,
     required this.url,
   });
-
-  /// The URL of the image to display.
-  final String url;
 
   @override
   State<FrostedGlassExample> createState() => _FrostedGlassExampleState();
@@ -143,10 +141,7 @@ class _FrostedGlassExampleState extends State<FrostedGlassExample>
                 setLayer: setLayer, scrollController: scrollController),
           ),
           customWidgets: ImageEditorCustomWidgets(
-            loadingDialog: (message, configs) => FrostedGlassLoadingDialog(
-              message: message,
-              configs: configs,
-            ),
+            loadingDialog: const FrostedGlassLoadingDialog(),
             mainEditor: CustomWidgetsMainEditor(
               closeWarningDialog: (editor) async {
                 if (!context.mounted) return false;
@@ -189,11 +184,6 @@ class _FrostedGlassExampleState extends State<FrostedGlassExample>
                   openAspectRatios: cropRotateEditor.openAspectRatioOptions,
                 ),
               ),
-            ),
-            tuneEditor: CustomWidgetsTuneEditor(
-              appBar: (filterEditor, rebuildStream) => null,
-              bottomBar: (filterEditor, rebuildStream) => null,
-              bodyItems: _buildTuneEditorBody,
             ),
             filterEditor: CustomWidgetsFilterEditor(
               slider:
@@ -246,7 +236,7 @@ class _FrostedGlassExampleState extends State<FrostedGlassExample>
 
   List<ReactiveCustomWidget> _buildMainBodyWidgets(
     ProImageEditorState editor,
-    Stream<dynamic> rebuildStream,
+    Stream rebuildStream,
   ) {
     return [
       if (editor.selectedLayerIndex < 0)
@@ -262,7 +252,7 @@ class _FrostedGlassExampleState extends State<FrostedGlassExample>
 
   List<ReactiveCustomWidget> _buildPaintEditorBody(
     PaintingEditorState paintEditor,
-    Stream<dynamic> rebuildStream,
+    Stream rebuildStream,
   ) {
     return [
       /// Appbar
@@ -283,31 +273,8 @@ class _FrostedGlassExampleState extends State<FrostedGlassExample>
     ];
   }
 
-  List<ReactiveCustomWidget> _buildTuneEditorBody(
-    TuneEditorState tuneEditor,
-    Stream<dynamic> rebuildStream,
-  ) {
-    return [
-      /// Appbar
-      ReactiveCustomWidget(
-        stream: rebuildStream,
-        builder: (_) {
-          return FrostedGlassTuneAppbar(tuneEditor: tuneEditor);
-        },
-      ),
-
-      /// Bottombar
-      ReactiveCustomWidget(
-        stream: rebuildStream,
-        builder: (_) => FrostedGlassTuneBottombar(tuneEditor: tuneEditor),
-      ),
-    ];
-  }
-
   List<ReactiveCustomWidget> _buildTextEditorBody(
-    TextEditorState textEditor,
-    Stream<dynamic> rebuildStream,
-  ) {
+      TextEditorState textEditor, Stream rebuildStream) {
     return [
       /// Background
       ReactiveCustomWidget(

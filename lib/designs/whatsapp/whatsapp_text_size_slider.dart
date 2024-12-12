@@ -7,32 +7,13 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:pro_image_editor/pro_image_editor.dart';
 
-/// A stateless widget that provides a text size slider in the WhatsApp theme.
-///
-/// This widget allows users to adjust the size of text within a text editor,
-/// using a design inspired by WhatsApp.
 class WhatsappTextSizeSlider extends StatelessWidget {
-  /// Creates a [WhatsappTextSizeSlider] widget.
-  ///
-  /// This slider allows users to adjust the size of text within a text editor,
-  /// integrating seamlessly with the WhatsApp-themed text editing interface.
-  ///
-  /// Example:
-  /// ```
-  /// WhatsappTextSizeSlider(
-  ///   textEditor: myTextEditorState,
-  /// )
-  /// ```
+  final TextEditorState textEditor;
+
   const WhatsappTextSizeSlider({
     super.key,
     required this.textEditor,
   });
-
-  /// The state of the text editor associated with this slider.
-  ///
-  /// This state allows the slider to interact with the text editor, providing
-  /// necessary controls to manage text size adjustments.
-  final TextEditorState textEditor;
 
   @override
   Widget build(BuildContext context) {

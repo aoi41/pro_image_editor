@@ -2,8 +2,7 @@
 import 'package:pro_image_editor/models/editor_configs/main_editor_configs.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 
-/// A mixin providing access to converted configurations from
-/// [ProImageEditorConfigs].
+/// A mixin providing access to converted configurations from [ProImageEditorConfigs].
 mixin ImageEditorConvertedConfigs {
   /// Returns the main configuration options for the editor.
   ProImageEditorConfigs get configs;
@@ -23,9 +22,6 @@ mixin ImageEditorConvertedConfigs {
 
   /// Returns the configuration options for the filter editor.
   FilterEditorConfigs get filterEditorConfigs => configs.filterEditorConfigs;
-
-  /// Returns the configuration options for the tune editor.
-  TuneEditorConfigs get tuneEditorConfigs => configs.tuneEditorConfigs;
 
   /// Returns the configuration options for the blur editor.
   BlurEditorConfigs get blurEditorConfigs => configs.blurEditorConfigs;
@@ -62,13 +58,12 @@ mixin ImageEditorConvertedConfigs {
   StateHistoryConfigs get stateHistoryConfigs => configs.stateHistoryConfigs;
 
   /// Gets the configurations related to image generation.
-  ImageGenerationConfigs get imageGenerationConfigs =>
+  ImageGeneratioConfigs get imageGenerationConfigs =>
       configs.imageGenerationConfigs;
 
   /// Returns the hero tag used in the image editor.
   String get heroTag => configs.heroTag;
 
-  /// Indicates if the design mode is material. Otherwise the design mode is
-  /// cupertino.
+  /// Indicates if the design mode is material. Otherwise the design mode is cupertino.
   bool get isMaterial => configs.designMode == ImageEditorDesignModeE.material;
 }

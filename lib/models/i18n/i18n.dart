@@ -7,19 +7,17 @@ import 'i18n_layer_interaction.dart';
 import 'i18n_painting_editor.dart';
 import 'i18n_sticker_editor.dart';
 import 'i18n_text_editor.dart';
-import 'i18n_tune_editor.dart';
 import 'i18n_various.dart';
 
-export 'i18n_blur_editor.dart';
-export 'i18n_crop_rotate_editor.dart';
-export 'i18n_emoji_editor.dart';
-export 'i18n_filter_editor.dart';
 export 'i18n_layer_interaction.dart';
-export 'i18n_painting_editor.dart';
-export 'i18n_sticker_editor.dart';
-export 'i18n_text_editor.dart';
-export 'i18n_tune_editor.dart';
 export 'i18n_various.dart';
+export 'i18n_text_editor.dart';
+export 'i18n_painting_editor.dart';
+export 'i18n_filter_editor.dart';
+export 'i18n_blur_editor.dart';
+export 'i18n_emoji_editor.dart';
+export 'i18n_sticker_editor.dart';
+export 'i18n_crop_rotate_editor.dart';
 
 /// The `I18n` class provides internationalization settings for the image editor
 /// and its components. It includes translations and messages for various parts
@@ -105,8 +103,56 @@ export 'i18n_various.dart';
 /// // Access other translations and messages...
 /// ```
 class I18n {
-  /// Creates an instance of [I18n] with customizable internationalization
-  /// settings.
+  /// Translations and messages specific to the painting editor.
+  final I18nPaintingEditor paintEditor;
+
+  /// Translations and messages for various parts of the editor.
+  final I18nVarious various;
+
+  /// Translations and messages for layer interactions.
+  final I18nLayerInteraction layerInteraction;
+
+  /// Translations and messages specific to the text editor.
+  final I18nTextEditor textEditor;
+
+  /// Translations and messages specific to the filter editor.
+  final I18nFilterEditor filterEditor;
+
+  /// Translations and messages specific to the blur editor.
+  final I18nBlurEditor blurEditor;
+
+  /// Translations and messages specific to the emoji editor.
+  final I18nEmojiEditor emojiEditor;
+
+  /// Translations and messages specific to the sticker editor.
+  final I18nStickerEditor stickerEditor;
+
+  /// Translations and messages specific to the crop and rotate editor.
+  final I18nCropRotateEditor cropRotateEditor;
+
+  /// Message displayed while changes are being applied.
+  final String doneLoadingMsg;
+
+  /// Message displayed during the import of state history.
+  /// If the text is empty, no loading dialog will be shown.
+  final String importStateHistoryMsg;
+
+  /// Text for the "Cancel" action.
+  final String cancel;
+
+  /// Text for the "Undo" action.
+  final String undo;
+
+  /// Text for the "Redo" action.
+  final String redo;
+
+  /// Text for the "Done" action.
+  final String done;
+
+  /// Text for the "Remove" action.
+  final String remove;
+
+  /// Creates an instance of [I18n] with customizable internationalization settings.
   ///
   /// You can provide translations and messages for various components of the
   /// Image Editor by specifying the corresponding [I18n] subclasses. If a
@@ -145,7 +191,6 @@ class I18n {
     this.paintEditor = const I18nPaintingEditor(),
     this.textEditor = const I18nTextEditor(),
     this.cropRotateEditor = const I18nCropRotateEditor(),
-    this.tuneEditor = const I18nTuneEditor(),
     this.filterEditor = const I18nFilterEditor(),
     this.blurEditor = const I18nBlurEditor(),
     this.emojiEditor = const I18nEmojiEditor(),
@@ -159,103 +204,4 @@ class I18n {
     this.remove = 'Remove',
     this.doneLoadingMsg = 'Changes are being applied',
   });
-
-  /// Translations and messages specific to the painting editor.
-  final I18nPaintingEditor paintEditor;
-
-  /// Translations and messages for various parts of the editor.
-  final I18nVarious various;
-
-  /// Translations and messages for layer interactions.
-  final I18nLayerInteraction layerInteraction;
-
-  /// Translations and messages specific to the text editor.
-  final I18nTextEditor textEditor;
-
-  /// Translations and messages specific to the filter editor.
-  final I18nFilterEditor filterEditor;
-
-  /// Translations and messages specific to the tune editor.
-  final I18nTuneEditor tuneEditor;
-
-  /// Translations and messages specific to the blur editor.
-  final I18nBlurEditor blurEditor;
-
-  /// Translations and messages specific to the emoji editor.
-  final I18nEmojiEditor emojiEditor;
-
-  /// Translations and messages specific to the sticker editor.
-  final I18nStickerEditor stickerEditor;
-
-  /// Translations and messages specific to the crop and rotate editor.
-  final I18nCropRotateEditor cropRotateEditor;
-
-  /// Message displayed while changes are being applied.
-  final String doneLoadingMsg;
-
-  /// Message displayed during the import of state history.
-  /// If the text is empty, no loading dialog will be shown.
-  final String importStateHistoryMsg;
-
-  /// Text for the "Cancel" action.
-  final String cancel;
-
-  /// Text for the "Undo" action.
-  final String undo;
-
-  /// Text for the "Redo" action.
-  final String redo;
-
-  /// Text for the "Done" action.
-  final String done;
-
-  /// Text for the "Remove" action.
-  final String remove;
-
-  /// Creates a copy of this `I18n` object with the given fields
-  /// replaced with new values.
-  ///
-  /// The [copyWith] method allows you to create a new instance of
-  /// [I18n] with some properties updated while keeping the
-  /// others unchanged.
-  I18n copyWith({
-    I18nPaintingEditor? paintEditor,
-    I18nVarious? various,
-    I18nLayerInteraction? layerInteraction,
-    I18nTextEditor? textEditor,
-    I18nFilterEditor? filterEditor,
-    I18nTuneEditor? tuneEditor,
-    I18nBlurEditor? blurEditor,
-    I18nEmojiEditor? emojiEditor,
-    I18nStickerEditor? stickerEditor,
-    I18nCropRotateEditor? cropRotateEditor,
-    String? doneLoadingMsg,
-    String? importStateHistoryMsg,
-    String? cancel,
-    String? undo,
-    String? redo,
-    String? done,
-    String? remove,
-  }) {
-    return I18n(
-      paintEditor: paintEditor ?? this.paintEditor,
-      various: various ?? this.various,
-      layerInteraction: layerInteraction ?? this.layerInteraction,
-      textEditor: textEditor ?? this.textEditor,
-      tuneEditor: tuneEditor ?? this.tuneEditor,
-      filterEditor: filterEditor ?? this.filterEditor,
-      blurEditor: blurEditor ?? this.blurEditor,
-      emojiEditor: emojiEditor ?? this.emojiEditor,
-      stickerEditor: stickerEditor ?? this.stickerEditor,
-      cropRotateEditor: cropRotateEditor ?? this.cropRotateEditor,
-      doneLoadingMsg: doneLoadingMsg ?? this.doneLoadingMsg,
-      importStateHistoryMsg:
-          importStateHistoryMsg ?? this.importStateHistoryMsg,
-      cancel: cancel ?? this.cancel,
-      undo: undo ?? this.undo,
-      redo: redo ?? this.redo,
-      done: done ?? this.done,
-      remove: remove ?? this.remove,
-    );
-  }
 }

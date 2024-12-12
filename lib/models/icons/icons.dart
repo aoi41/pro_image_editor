@@ -10,24 +10,66 @@ import 'icons_layer_interaction.dart';
 import 'icons_painting_editor.dart';
 import 'icons_sticker_editor.dart';
 import 'icons_text_editor.dart';
-import 'icons_tune_editor.dart';
 
-export 'icons_blur_editor.dart';
 export 'icons_crop_rotate_editor.dart';
 export 'icons_emoji_editor.dart';
-export 'icons_filter_editor.dart';
-export 'icons_layer_interaction.dart';
-export 'icons_painting_editor.dart';
 export 'icons_sticker_editor.dart';
+export 'icons_filter_editor.dart';
+export 'icons_blur_editor.dart';
+export 'icons_painting_editor.dart';
 export 'icons_text_editor.dart';
-export 'icons_tune_editor.dart';
+export 'icons_layer_interaction.dart';
 
 /// Customizable icons for the Image Editor component.
 class ImageEditorIcons {
+  /// The icon for closing the editor without saving.
+  final IconData closeEditor;
+
+  /// The icon for applying changes and closing the editor.
+  final IconData doneIcon;
+
+  /// The icon for the back button.
+  final IconData backButton;
+
+  /// The icon for applying changes in the editor.
+  final IconData applyChanges;
+
+  /// The icon for undoing the last action.
+  final IconData undoAction;
+
+  /// The icon for redoing the last undone action.
+  final IconData redoAction;
+
+  /// The icon for removing an element/ layer like an emoji.
+  final IconData removeElementZone;
+
+  /// Icons for the Painting Editor component.
+  final IconsPaintingEditor paintingEditor;
+
+  /// Icons for the Text Editor component.
+  final IconsTextEditor textEditor;
+
+  /// Icons for the Crop and Rotate Editor component.
+  final IconsCropRotateEditor cropRotateEditor;
+
+  /// Icons for the Filter Editor component.
+  final IconsFilterEditor filterEditor;
+
+  /// Icons for the Blur Editor component.
+  final IconsBlurEditor blurEditor;
+
+  /// Icons for the Emoji Editor component.
+  final IconsEmojiEditor emojiEditor;
+
+  /// Icons for the Sticker Editor component.
+  final IconsStickerEditor stickerEditor;
+
+  /// Icons for the layer interaction settings.
+  final IconsLayerInteraction layerInteraction;
+
   /// Creates an instance of [ImageEditorIcons] with customizable icon settings.
   ///
-  /// You can provide custom icons for various actions in the Image Editor
-  /// component.
+  /// You can provide custom icons for various actions in the Image Editor component.
   ///
   /// - [closeEditor]: The icon for closing the editor.
   /// - [doneIcon]: The icon for applying changes.
@@ -38,8 +80,7 @@ class ImageEditorIcons {
   /// - [removeElementZone]: The icon for removing an element or zone.
   /// - [paintingEditor]: Customizable icons for the Painting Editor component.
   /// - [textEditor]: Customizable icons for the Text Editor component.
-  /// - [cropRotateEditor]: Customizable icons for the Crop and Rotate Editor
-  /// component.
+  /// - [cropRotateEditor]: Customizable icons for the Crop and Rotate Editor component.
   /// - [filterEditor]: Customizable icons for the Filter Editor component.
   /// - [blurEditor]: Customizable icons for the Blur Editor component.
   /// - [emojiEditor]: Customizable icons for the Emoji Editor component.
@@ -96,7 +137,6 @@ class ImageEditorIcons {
     this.textEditor = const IconsTextEditor(),
     this.cropRotateEditor = const IconsCropRotateEditor(),
     this.filterEditor = const IconsFilterEditor(),
-    this.tuneEditor = const IconsTuneEditor(),
     this.blurEditor = const IconsBlurEditor(),
     this.emojiEditor = const IconsEmojiEditor(),
     this.stickerEditor = const IconsStickerEditor(),
@@ -109,96 +149,4 @@ class ImageEditorIcons {
     this.redoAction = Icons.redo,
     this.removeElementZone = Icons.delete_outline_rounded,
   });
-
-  /// The icon for closing the editor without saving.
-  final IconData closeEditor;
-
-  /// The icon for applying changes and closing the editor.
-  final IconData doneIcon;
-
-  /// The icon for the back button.
-  final IconData backButton;
-
-  /// The icon for applying changes in the editor.
-  final IconData applyChanges;
-
-  /// The icon for undoing the last action.
-  final IconData undoAction;
-
-  /// The icon for redoing the last undone action.
-  final IconData redoAction;
-
-  /// The icon for removing an element/ layer like an emoji.
-  final IconData removeElementZone;
-
-  /// Icons for the Painting Editor component.
-  final IconsPaintingEditor paintingEditor;
-
-  /// Icons for the Text Editor component.
-  final IconsTextEditor textEditor;
-
-  /// Icons for the Crop and Rotate Editor component.
-  final IconsCropRotateEditor cropRotateEditor;
-
-  /// Icons for the Filter Editor component.
-  final IconsFilterEditor filterEditor;
-
-  /// Icons for the tune Editor component.
-  final IconsTuneEditor tuneEditor;
-
-  /// Icons for the Blur Editor component.
-  final IconsBlurEditor blurEditor;
-
-  /// Icons for the Emoji Editor component.
-  final IconsEmojiEditor emojiEditor;
-
-  /// Icons for the Sticker Editor component.
-  final IconsStickerEditor stickerEditor;
-
-  /// Icons for the layer interaction settings.
-  final IconsLayerInteraction layerInteraction;
-
-  /// Creates a copy of this `ImageEditorIcons` object with the given fields
-  /// replaced with new values.
-  ///
-  /// The [copyWith] method allows you to create a new instance of
-  /// [ImageEditorIcons] with some properties updated while keeping the
-  /// others unchanged.
-  ImageEditorIcons copyWith({
-    IconData? closeEditor,
-    IconData? doneIcon,
-    IconData? backButton,
-    IconData? applyChanges,
-    IconData? undoAction,
-    IconData? redoAction,
-    IconData? removeElementZone,
-    IconsPaintingEditor? paintingEditor,
-    IconsTextEditor? textEditor,
-    IconsCropRotateEditor? cropRotateEditor,
-    IconsFilterEditor? filterEditor,
-    IconsTuneEditor? tuneEditor,
-    IconsBlurEditor? blurEditor,
-    IconsEmojiEditor? emojiEditor,
-    IconsStickerEditor? stickerEditor,
-    IconsLayerInteraction? layerInteraction,
-  }) {
-    return ImageEditorIcons(
-      closeEditor: closeEditor ?? this.closeEditor,
-      doneIcon: doneIcon ?? this.doneIcon,
-      backButton: backButton ?? this.backButton,
-      applyChanges: applyChanges ?? this.applyChanges,
-      undoAction: undoAction ?? this.undoAction,
-      redoAction: redoAction ?? this.redoAction,
-      removeElementZone: removeElementZone ?? this.removeElementZone,
-      paintingEditor: paintingEditor ?? this.paintingEditor,
-      textEditor: textEditor ?? this.textEditor,
-      cropRotateEditor: cropRotateEditor ?? this.cropRotateEditor,
-      filterEditor: filterEditor ?? this.filterEditor,
-      tuneEditor: tuneEditor ?? this.tuneEditor,
-      blurEditor: blurEditor ?? this.blurEditor,
-      emojiEditor: emojiEditor ?? this.emojiEditor,
-      stickerEditor: stickerEditor ?? this.stickerEditor,
-      layerInteraction: layerInteraction ?? this.layerInteraction,
-    );
-  }
 }

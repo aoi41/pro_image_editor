@@ -6,13 +6,19 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 import '../../mixins/converted_configs.dart';
 import '../../mixins/editor_configs_mixin.dart';
 
-/// The `StickerEditor` class is responsible for creating a widget that allows
-/// users to select emojis.
+/// The `StickerEditor` class is responsible for creating a widget that allows users to select emojis.
 ///
-/// This widget provides an EmojiPicker that allows users to choose emojis,
-/// which are then returned
+/// This widget provides an EmojiPicker that allows users to choose emojis, which are then returned
 /// as `EmojiLayerData` containing the selected emoji text.
 class StickerEditor extends StatefulWidget with SimpleConfigsAccess {
+  @override
+  final ProImageEditorConfigs configs;
+
+  @override
+  final ProImageEditorCallbacks callbacks;
+
+  final ScrollController scrollController;
+
   /// Creates an `StickerEditor` widget.
   const StickerEditor({
     super.key,
@@ -20,14 +26,6 @@ class StickerEditor extends StatefulWidget with SimpleConfigsAccess {
     this.callbacks = const ProImageEditorCallbacks(),
     required this.scrollController,
   });
-  @override
-  final ProImageEditorConfigs configs;
-
-  @override
-  final ProImageEditorCallbacks callbacks;
-
-  /// Controller for managing scroll actions.
-  final ScrollController scrollController;
 
   @override
   createState() => StickerEditorState();
@@ -52,15 +50,10 @@ class StickerEditorState extends State<StickerEditor>
 
   @override
   Widget build(BuildContext context) {
-    return ExtendedPopScope(
-      child: widget.configs.stickerEditorConfigs!
-          .buildStickers(setLayer, widget.scrollController),
-    );
+    return widget.configs.stickerEditorConfigs!
+        .buildStickers(setLayer, widget.scrollController);
   }
 
-  /// Sets the current layer with a sticker and closes the navigation.
-  ///
-  /// [sticker] is the widget to be set as the layer.
   void setLayer(Widget sticker) {
     Navigator.of(context).pop(
       StickerLayerData(sticker: sticker),

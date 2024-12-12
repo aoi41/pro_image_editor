@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:math';
+
 // Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -12,10 +15,6 @@ Future<ImageInfos> decodeImageInfos({
   TransformConfigs? configs,
 }) async {
   var decodedImage = await decodeImageFromList(bytes);
-  Size rawSize = Size(
-    decodedImage.width.toDouble(),
-    decodedImage.height.toDouble(),
-  );
 
   bool rotated = configs?.is90DegRotated == true;
   int w = decodedImage.width;
@@ -26,25 +25,15 @@ Future<ImageInfos> decodeImageInfos({
     h = h ~/ configs.scaleUser;
   }
 
-  /// If the image is rotated we also flip the width/ height
-  if (rotated) {
-    int hX = h;
-    h = w;
-    w = hX;
-  }
+  double widthRatio = (rotated ? h : w).toDouble() / screenSize.width;
+  double heightRatio = (rotated ? w : h).toDouble() / screenSize.height;
+  double pixelRatio = max(heightRatio, widthRatio);
 
-  double widthRatio = w.toDouble() / screenSize.width;
-  double heightRatio = h.toDouble() / screenSize.height;
-
-  bool imageFitToHeight =
-      screenSize.aspectRatio > Size(w.toDouble(), h.toDouble()).aspectRatio;
-
-  double pixelRatio = imageFitToHeight ? heightRatio : widthRatio;
-
-  Size renderedSize = rawSize / pixelRatio;
+  Size renderedSize =
+      Size(w.toDouble() / pixelRatio, h.toDouble() / pixelRatio);
 
   return ImageInfos(
-    rawSize: rawSize,
+    rawSize: Size(w.toDouble(), h.toDouble()),
     renderedSize: renderedSize,
     cropRectSize: configs != null && configs.isNotEmpty
         ? configs.cropRect.size
@@ -54,9 +43,13 @@ Future<ImageInfos> decodeImageInfos({
   );
 }
 
-/// Contains information about an image's size and rotation status.
 class ImageInfos {
-  /// Creates an instance of [ImageInfos].
+  final Size rawSize;
+  final Size renderedSize;
+  final Size cropRectSize;
+  final double pixelRatio;
+  final bool isRotated;
+
   const ImageInfos({
     required this.rawSize,
     required this.renderedSize,
@@ -65,23 +58,6 @@ class ImageInfos {
     required this.isRotated,
   });
 
-  /// The raw size of the image.
-  final Size rawSize;
-
-  /// The size of the image after rendering.
-  final Size renderedSize;
-
-  /// The size of the cropping rectangle.
-  final Size cropRectSize;
-
-  /// The pixel ratio of the image.
-  final double pixelRatio;
-
-  /// Whether the image is rotated.
-  final bool isRotated;
-
-  /// Creates a copy of the current [ImageInfos] instance with optional
-  /// updated values.
   ImageInfos copyWith({
     Size? rawSize,
     Size? renderedSize,

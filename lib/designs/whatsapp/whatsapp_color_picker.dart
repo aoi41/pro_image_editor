@@ -1,42 +1,15 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-/// A stateful widget that provides a color picker inspired by WhatsApp.
-///
-/// This color picker allows users to select a color, providing a callback for
-/// color changes and initializing with a specified color.
 class WhatsAppColorPicker extends StatefulWidget {
-  /// Creates a [WhatsAppColorPicker].
-  ///
-  /// This color picker lets users select a color, triggering a callback when
-  /// the color changes, and initializing with a specified color.
-  ///
-  /// Example:
-  /// ```
-  /// WhatsAppColorPicker(
-  ///   onColorChanged: (color) {
-  ///     // Handle color change
-  ///   },
-  ///   initColor: Colors.blue,
-  /// )
-  /// ```
+  final ValueChanged<Color> onColorChanged;
+  final Color initColor;
+
   const WhatsAppColorPicker({
     super.key,
     required this.onColorChanged,
     required this.initColor,
   });
-
-  /// Callback for handling color changes.
-  ///
-  /// This callback is triggered whenever the user selects a new color, allowing
-  /// the application to update its UI or perform other actions.
-  final ValueChanged<Color> onColorChanged;
-
-  /// The initial color selected in the color picker.
-  ///
-  /// This color sets the initial value of the picker, providing a starting
-  /// point for color selection.
-  final Color initColor;
 
   @override
   State<WhatsAppColorPicker> createState() => _WhatsAppColorPickerState();
@@ -45,7 +18,7 @@ class WhatsAppColorPicker extends StatefulWidget {
 class _WhatsAppColorPickerState extends State<WhatsAppColorPicker> {
   Color _selectedColor = Colors.black;
 
-  final List<Color> _colors = [
+  final List _colors = [
     Colors.white,
     Colors.black,
     const Color(0xFF81DA58),

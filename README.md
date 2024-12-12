@@ -48,17 +48,17 @@ The ProImageEditor is a Flutter widget designed for image editing within your ap
 <table>
   <thead>
     <tr>
-      <th align="center">Grounded-Design</th>
       <th align="center">Frosted-Glass-Design</th>
+      <th align="center">WhatsApp-Design</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td align="center" width="50%">
-        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/grounded-design.gif?raw=true" alt="Grounded-Design" />
+        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/frosted-glass-design.gif?raw=true" alt="Frosted-Glass-Design" />
       </td>
       <td align="center" width="50%">
-        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/frosted-glass-design.gif?raw=true" alt="Frosted-Glass-Design" />
+        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/whatsapp-design.gif?raw=true" alt="WhatsApp-Design" />
       </td>
     </tr>
   </tbody>
@@ -66,8 +66,64 @@ The ProImageEditor is a Flutter widget designed for image editing within your ap
 <table>
   <thead>
     <tr>
-      <th align="center">WhatsApp-Design</th>
       <th align="center">Paint-Editor</th>
+      <th align="center">Text-Editor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center" width="50%">
+        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/paint-editor.gif?raw=true" alt="Paint-Editor" />
+      </td>
+      <td align="center" width="50%">
+        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/text-editor.gif?raw=true" alt="Text-Editor" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <thead>
+    <tr>
+      <th align="center">Crop-Rotate-Editor</th>
+      <th align="center">Filter-Editor</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td align="center" width="50%">
+        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/crop-rotate-editor.gif?raw=true" alt="Crop-Rotate-Editor" />
+      </td>
+      <td align="center" width="50%">
+        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/filter-editor.gif?raw=true" alt="Filter-Editor" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th align="center">Emoji-Editor</th>
+      <th align="center">Sticker/ Widget Editor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center" width="50%">
+        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/emoji-editor.gif?raw=true" alt="Emoji-Editor" />
+      </td>
+      <td align="center" width="50%">
+        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/sticker-editor.gif?raw=true" alt="Sticker-Widget-Editor" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th align="center">Blur-Editor</th>
+      <th align="center">-</th>
     </tr>
   </thead>
   <tbody>
@@ -76,63 +132,6 @@ The ProImageEditor is a Flutter widget designed for image editing within your ap
         <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/whatsapp-design.gif?raw=true" alt="WhatsApp-Design" />
       </td>
       <td align="center" width="50%">
-        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/paint-editor.gif?raw=true" alt="Paint-Editor" />
-      </td>
-    </tr>
-  </tbody>
-</table>
-<table>
-  <thead>
-    <tr>
-      <th align="center">Text-Editor</th>
-      <th align="center">Crop-Rotate-Editor</th>
-    </tr>
-  </thead>
-  <tbody>
-   <tr>
-      <td align="center" width="50%">
-        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/text-editor.gif?raw=true" alt="Text-Editor" />
-      </td>
-      <td align="center" width="50%">
-        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/crop-rotate-editor.gif?raw=true" alt="Crop-Rotate-Editor" />
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table>
-  <thead>
-    <tr>
-      <th align="center">Filter-Editor</th>
-      <th align="center">Emoji-Editor</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td align="center" width="50%">
-        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/filter-editor.gif?raw=true" alt="Filter-Editor" />
-      </td>
-      <td align="center" width="50%">
-        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/emoji-editor.gif?raw=true" alt="Emoji-Editor" />
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table>
-  <thead>
-    <tr>
-      <th align="center">Sticker/ Widget Editor</th>
-      <th align="center">Blur-Editor</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td align="center" width="50%">
-        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/sticker-editor.gif?raw=true" alt="Sticker-Widget-Editor" />
-      </td>
-      <td align="center" width="50%">
-        <img src="https://github.com/hm21/pro_image_editor/blob/stable/assets/preview/blur-editor.gif?raw=true" alt="Blur-Editor" />
       </td>
     </tr>
   </tbody>
@@ -1084,7 +1083,7 @@ Creates a `ProImageEditor` widget for editing an image from a network URL.
 | `heroTag`                         | A unique hero tag for the Image Editor widget.                             | `'Pro-Image-Editor-Hero'`          |
 | `layerInteraction`                | Configuration options for the layer interaction behavior.                  | `LayerInteraction()`               |
 | `stateHistoryConfigs`             | Holds the configurations related to state history management.              | `StateHistoryConfigs()`            |
-| `imageGenerationConfigs`          | Holds the configurations related to image generation.                      | `imageGenerationConfigs()`          |
+| `imageGenerationConfigs`          | Holds the configurations related to image generation.                      | `ImageGeneratioConfigs()`          |
 
 
 ### ProImageEditorCallbacks
@@ -1584,15 +1583,6 @@ If you'd like to contribute code to this project, please follow these steps:
 ```bash
 git clone https://github.com/hm21/pro_image_editor.git
 ```
-
-<br/>
-
-## Contributors
-<a href="https://github.com/hm21/pro_image_editor/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=hm21/pro_image_editor" />
-</a>
-
-Made with [contrib.rocks](https://contrib.rocks).
 
 <br/>
 

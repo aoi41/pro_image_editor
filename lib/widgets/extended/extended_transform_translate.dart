@@ -14,10 +14,6 @@ import 'package:flutter/widgets.dart';
 /// The [initOffset] parameter sets the initial translation offset,
 /// and the [child] parameter is the widget to be translated.
 class ExtendedTransformTranslate extends StatefulWidget {
-  /// Creates an instance of [ExtendedTransformTranslate].
-  ///
-  /// [initOffset] is the initial translation offset.
-  /// [child] is the widget to be translated.
   const ExtendedTransformTranslate({
     super.key,
     required this.initOffset,
@@ -35,11 +31,8 @@ class ExtendedTransformTranslate extends StatefulWidget {
       ExtendedTransformTranslateState();
 }
 
-/// A [State] for managing the translation of a widget using
-/// [Transform.translate].
 class ExtendedTransformTranslateState
     extends State<ExtendedTransformTranslate> {
-  /// The current translation offset.
   late Offset offset;
 
   @override

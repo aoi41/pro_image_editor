@@ -3,7 +3,6 @@
 // Dart imports:
 import 'dart:async';
 import 'dart:html' as html;
-import 'dart:typed_data';
 
 // Flutter imports:
 import 'package:flutter/rendering.dart';
@@ -13,31 +12,15 @@ import 'package:pro_image_editor/models/multi_threading/thread_request_model.dar
 import 'package:pro_image_editor/models/multi_threading/thread_response_model.dart';
 import 'package:pro_image_editor/utils/content_recorder.dart/threads_managers/threads/thread.dart';
 
-/// A class representing a web worker thread.
-///
-/// Extends [Thread] to handle web worker operations including
-/// sending messages, receiving responses, and managing the worker's lifecycle.
 class WebWorkerThread extends Thread {
-  /// Creates an instance of [WebWorkerThread].
-  ///
-  /// The [onMessage] callback is required to handle messages received
-  /// from the web worker.
-  WebWorkerThread({
-    required super.onMessage,
-  });
-
-  /// The URL of the web worker script.
-  ///
-  /// This URL points to the JavaScript file that will be loaded by the
-  /// [html.Worker] instance to run the web worker's code.
   final String _workerUrl =
       'assets/packages/pro_image_editor/lib/web/web_worker.dart.js';
 
-  /// The [html.Worker] instance managing the web worker.
-  ///
-  /// This is the web worker instance that executes the worker script
-  /// and communicates with the main thread.
   late final html.Worker worker;
+
+  WebWorkerThread({
+    required super.onMessage,
+  });
 
   @override
   void init() {
@@ -49,8 +32,8 @@ class WebWorkerThread extends Thread {
           if (data?['id'] != null) {
             activeTasks--;
             onMessage(ThreadResponse(
-              bytes: data['bytes'] as Uint8List?,
-              id: data['id'] as String,
+              bytes: data['bytes'],
+              id: data['id'],
             ));
           }
         });
@@ -111,8 +94,7 @@ class WebWorkerThread extends Thread {
 
   @override
   void destroy() {
-    worker
-      ..postMessage({'mode': 'kill'})
-      ..terminate();
+    worker.postMessage({'mode': 'kill'});
+    worker.terminate();
   }
 }

@@ -1,10 +1,13 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+
+// Project imports:
 import 'package:pro_image_editor/modules/emoji_editor/widgets/emoji_editor_bottom_bar.dart';
 
-/// Custom category view for the emoji editor with WhatsApp-like styling.
 class EmojiEditorCategoryView extends CategoryView {
-  /// Constructor for creating an instance of EmojiEditorCategoryView.
   const EmojiEditorCategoryView(
     super.config,
     super.state,
@@ -13,16 +16,12 @@ class EmojiEditorCategoryView extends CategoryView {
     super.key,
   });
 
-  /// Creates the state for WhatsAppCategoryViewState.
   @override
   WhatsAppCategoryViewState createState() => WhatsAppCategoryViewState();
 }
 
-/// State class for the EmojiEditorCategoryView, implementing the
-/// SkinToneOverlayStateMixin.
 class WhatsAppCategoryViewState extends State<EmojiEditorCategoryView>
     with SkinToneOverlayStateMixin {
-  /// Builds the widget tree for the category view.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,10 +42,8 @@ class WhatsAppCategoryViewState extends State<EmojiEditorCategoryView>
     );
   }
 
-  /// Builds the backspace button based on configuration settings.
   Widget _buildBackspaceButton() {
-    if (widget.config.categoryViewConfig.extraTab ==
-        CategoryExtraTab.BACKSPACE) {
+    if (widget.config.categoryViewConfig.showBackspaceButton) {
       return BackspaceButton(
         widget.config,
         widget.state.onBackspacePressed,

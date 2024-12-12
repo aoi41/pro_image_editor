@@ -3,34 +3,17 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 
-/// A widget that demonstrates the building of sticker categories and displays
-/// them in a scrollable grid layout. It also allows interaction with stickers
-/// to be set in an image editor layer.
 class DemoBuildStickers extends StatelessWidget {
-  /// Creates a [DemoBuildStickers] widget.
-  ///
-  /// [setLayer] is a callback function to set the selected sticker widget in
-  /// the editor.
-  /// [scrollController] controls the scroll behavior of the sticker list.
-  /// [categoryColor] defines the background color of the category bar.
+  final Function(Widget) setLayer;
+  final ScrollController scrollController;
+
   DemoBuildStickers({
     super.key,
     required this.setLayer,
     required this.scrollController,
-    this.categoryColor = const Color(0xFF424242),
   });
 
-  /// Callback function to set the selected sticker in the image editor layer.
-  final Function(Widget) setLayer;
-
-  /// Controls the scroll behavior of the sticker grid.
-  final ScrollController scrollController;
-
-  /// Color for the category selection bar.
-  final Color categoryColor;
-
-  /// Titles for the sticker categories.
-  final List<String> demoTitles = [
+  final List<String> demoTitels = [
     'Recent',
     'Favorites',
     'Shapes',
@@ -44,7 +27,7 @@ class DemoBuildStickers extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> slivers = [];
     int offset = 0;
-    for (var element in demoTitles) {
+    for (var element in demoTitels) {
       slivers.addAll([
         SliverPadding(
           padding: const EdgeInsets.only(bottom: 4),
@@ -74,7 +57,7 @@ class DemoBuildStickers extends StatelessWidget {
         ),
         Container(
           height: 50,
-          color: categoryColor,
+          color: Colors.grey.shade800,
           child: Row(
             children: [
               IconButton(
@@ -155,17 +138,19 @@ class DemoBuildStickers extends StatelessWidget {
           );
           return GestureDetector(
             onTap: () async {
-              // Important make sure the image is completely loaded
+              // Important make sure the image is completly loaded
               // cuz the editor will directly take a screenshot
               // inside of a background isolated thread.
-              LoadingDialog.instance.show(
+              LoadingDialog loading = LoadingDialog();
+              await loading.show(
                 context,
                 configs: const ProImageEditorConfigs(),
                 theme: ThemeData.dark(),
               );
 
+              if (!context.mounted) return;
               await precacheImage(NetworkImage(url), context);
-              LoadingDialog.instance.hide();
+              if (context.mounted) await loading.hide(context);
               setLayer(widget);
             },
             child: MouseRegion(

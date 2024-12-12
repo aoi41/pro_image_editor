@@ -15,52 +15,17 @@ import 'layer_interaction_helper/layer_interaction_helper_widget.dart';
 
 /// A widget representing a layer within a design canvas.
 class LayerWidget extends StatefulWidget with SimpleConfigsAccess {
-  /// Creates a [LayerWidget] with the specified properties.
-  const LayerWidget({
-    super.key,
-    this.onScaleRotateDown,
-    this.onScaleRotateUp,
-    required this.editorCenterX,
-    required this.editorCenterY,
-    required this.configs,
-    required this.layerData,
-    this.onContextMenuToggled,
-    this.onTapDown,
-    this.onTapUp,
-    this.onTap,
-    this.onEditTap,
-    this.onRemoveTap,
-    this.highPerformanceMode = false,
-    this.enableHitDetection = false,
-    this.selected = false,
-    this.isInteractive = false,
-    this.callbacks = const ProImageEditorCallbacks(),
-  });
   @override
   final ProImageEditorConfigs configs;
 
   @override
   final ProImageEditorCallbacks callbacks;
 
-  /// The x-coordinate of the editor's center.
-  ///
-  /// This parameter specifies the horizontal center of the editor's body in
-  /// logical pixels, used to position and transform layers relative to the
-  /// editor's center.
   final double editorCenterX;
-
-  /// The y-coordinate of the editor's center.
-  ///
-  /// This parameter specifies the vertical center of the editor's body in
-  /// logical pixels,  used to position and transform layers relative to the
-  /// editor's center.
   final double editorCenterY;
 
   /// Data for the layer.
   final Layer layerData;
-
-  /// Callback when the context menu open/close
-  final Function(bool isOpen)? onContextMenuToggled;
 
   /// Callback when a tap down event occurs.
   final Function()? onTapDown;
@@ -77,40 +42,14 @@ class LayerWidget extends StatefulWidget with SimpleConfigsAccess {
   /// Callback for editing the layer.
   final Function()? onEditTap;
 
-  /// Callback for handling pointer down events associated with scale and rotate
-  /// gestures.
-  ///
-  /// This callback is triggered when the user presses down on the widget to
-  /// begin a scaling or rotating gesture. It provides both the pointer event
-  /// and the size of the widget being interacted with, allowing for precise
-  /// manipulation.
-  ///
-  /// - Parameters:
-  ///   - event: The [PointerDownEvent] containing details about the pointer
-  ///     interaction, such as position and device type.
-  ///   - size: The [Size] of the widget being manipulated, useful for
-  ///     calculating scaling and rotation transformations relative to the
-  ///     widget's dimensions.
   final Function(PointerDownEvent, Size)? onScaleRotateDown;
-
-  /// Callback for handling pointer up events associated with scale and rotate
-  /// gestures.
-  ///
-  /// This callback is triggered when the user releases the widget after a
-  /// scaling or rotating gesture. It allows for finalizing the interaction and
-  /// making any necessary updates or state changes based on the completed
-  /// gesture.
-  ///
-  /// - Parameter event: The [PointerUpEvent] containing details about the
-  ///   pointer release, such as position and device type.
   final Function(PointerUpEvent)? onScaleRotateUp;
 
   /// Controls high-performance for free-style drawing.
   final bool highPerformanceMode;
 
   /// Enables or disables hit detection.
-  /// When set to `true`, it allows detecting user interactions with the
-  /// interface.
+  /// When set to `true`, it allows detecting user interactions with the interface.
   final bool enableHitDetection;
 
   /// Indicates whether the layer is selected.
@@ -118,6 +57,27 @@ class LayerWidget extends StatefulWidget with SimpleConfigsAccess {
 
   /// Indicates whether the layer is interactive.
   final bool isInteractive;
+
+  /// Creates a [LayerWidget] with the specified properties.
+  const LayerWidget({
+    super.key,
+    this.onScaleRotateDown,
+    this.onScaleRotateUp,
+    required this.editorCenterX,
+    required this.editorCenterY,
+    required this.configs,
+    required this.layerData,
+    this.onTapDown,
+    this.onTapUp,
+    this.onTap,
+    this.onEditTap,
+    this.onRemoveTap,
+    this.highPerformanceMode = false,
+    this.enableHitDetection = false,
+    this.selected = false,
+    this.isInteractive = false,
+    this.callbacks = const ProImageEditorCallbacks(),
+  });
 
   @override
   createState() => _LayerWidgetState();
@@ -161,10 +121,8 @@ class _LayerWidgetState extends State<LayerWidget>
     if (_checkHitIsOutsideInCanvas()) return;
     final Offset clickPosition = details.globalPosition;
 
-    widget.onContextMenuToggled?.call(true);
-
     // Show a popup menu at the click position
-    showMenu(
+    showMenu<String>(
       context: context,
       position: RelativeRect.fromLTRB(
         clickPosition.dx,
@@ -173,13 +131,13 @@ class _LayerWidgetState extends State<LayerWidget>
         clickPosition.dy + 1.0, // Adding a small value to avoid zero height
       ),
       items: <PopupMenuEntry<String>>[
-        PopupMenuItem<String>(
+        const PopupMenuItem<String>(
           value: 'remove',
           child: Row(
             children: [
-              const Icon(Icons.delete_outline),
-              const SizedBox(width: 4),
-              Text(i18n.layerInteraction.remove),
+              Icon(Icons.delete_outline),
+              SizedBox(width: 4),
+              Text('Remove'),
             ],
           ),
         ),
@@ -188,7 +146,6 @@ class _LayerWidgetState extends State<LayerWidget>
       if (selectedValue != null) {
         widget.onRemoveTap?.call();
       }
-      widget.onContextMenuToggled?.call(false);
     });
   }
 
@@ -217,8 +174,7 @@ class _LayerWidgetState extends State<LayerWidget>
         !(_layer as PaintingLayerData).item.hit;
   }
 
-  /// Calculates the transformation matrix for the layer's position and
-  /// rotation.
+  /// Calculates the transformation matrix for the layer's position and rotation.
   Matrix4 _calcTransformMatrix() {
     return Matrix4.identity()
       ..setEntry(3, 2, 0.001) // Add a small z-offset to avoid rendering issues
@@ -252,7 +208,6 @@ class _LayerWidgetState extends State<LayerWidget>
   /// Build the content with possible transformations
   Widget _buildPosition() {
     Matrix4 transformMatrix = _calcTransformMatrix();
-
     return Hero(
       key: _layerKey,
       createRectTween: (begin, end) => RectTween(begin: begin, end: end),
@@ -260,61 +215,60 @@ class _LayerWidgetState extends State<LayerWidget>
       child: Transform(
         transform: transformMatrix,
         alignment: Alignment.center,
-        child: IgnorePointer(
-          ignoring: !widget.layerData.enableInteraction,
-          child: LayerInteractionHelperWidget(
-            layerData: widget.layerData,
-            configs: configs,
-            callbacks: callbacks,
-            selected: widget.selected,
-            onEditLayer: widget.onEditTap,
-            isInteractive:
-                widget.isInteractive && widget.layerData.enableInteraction,
-            onScaleRotateDown: (details) {
-              widget.onScaleRotateDown
-                  ?.call(details, context.size ?? Size.zero);
-            },
-            onScaleRotateUp: widget.onScaleRotateUp,
-            onRemoveLayer: widget.onRemoveTap,
-            child: MouseRegion(
-              hitTestBehavior: HitTestBehavior.translucent,
-              cursor: _showMoveCursor
-                  ? imageEditorTheme.layerInteraction.hoverCursor
-                  : MouseCursor.defer,
-              onEnter: (event) {
-                if (_layerType != _LayerType.canvas) {
-                  setState(() {
-                    _showMoveCursor = true;
-                  });
-                }
+        child: Stack(
+          children: [
+            LayerInteractionHelperWidget(
+              layerData: widget.layerData,
+              configs: configs,
+              selected: widget.selected,
+              onEditLayer: widget.onEditTap,
+              isInteractive: widget.isInteractive,
+              onScaleRotateDown: (details) {
+                widget.onScaleRotateDown
+                    ?.call(details, context.size ?? Size.zero);
               },
-              onExit: (event) {
-                if (_layerType == _LayerType.canvas) {
-                  (widget.layerData as PaintingLayerData).item.hit = false;
-                } else {
-                  setState(() {
-                    _showMoveCursor = false;
-                  });
-                }
-              },
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onSecondaryTapUp: isDesktop ? _onSecondaryTapUp : null,
-                onTap: _onTap,
-                child: Listener(
+              onScaleRotateUp: widget.onScaleRotateUp,
+              onRemoveLayer: widget.onRemoveTap,
+              child: MouseRegion(
+                hitTestBehavior: HitTestBehavior.translucent,
+                cursor: _showMoveCursor
+                    ? imageEditorTheme.layerInteraction.hoverCursor
+                    : MouseCursor.defer,
+                onEnter: (event) {
+                  if (_layerType != _LayerType.canvas) {
+                    setState(() {
+                      _showMoveCursor = true;
+                    });
+                  }
+                },
+                onExit: (event) {
+                  if (_layerType == _LayerType.canvas) {
+                    (widget.layerData as PaintingLayerData).item.hit = false;
+                  } else {
+                    setState(() {
+                      _showMoveCursor = false;
+                    });
+                  }
+                },
+                child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onPointerDown: _onPointerDown,
-                  onPointerUp: _onPointerUp,
-                  child: Padding(
-                    padding: EdgeInsets.all(widget.selected ? 7.0 : 0),
-                    child: FittedBox(
-                      child: _buildContent(),
+                  onSecondaryTapUp: isDesktop ? _onSecondaryTapUp : null,
+                  onTap: _onTap,
+                  child: Listener(
+                    behavior: HitTestBehavior.translucent,
+                    onPointerDown: _onPointerDown,
+                    onPointerUp: _onPointerUp,
+                    child: Padding(
+                      padding: EdgeInsets.all(widget.selected ? 7.0 : 0),
+                      child: FittedBox(
+                        child: _buildContent(),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -342,7 +296,9 @@ class _LayerWidgetState extends State<LayerWidget>
       text: span,
       textAlign: TextAlign.left,
       textDirection: TextDirection.ltr,
-    )..layout();
+    );
+
+    painter.layout();
     return painter.preferredLineHeight;
   }
 

@@ -18,7 +18,7 @@ void isolatedImageConverter(SendPort port) {
   final receivePort = ReceivePort();
   port.send(receivePort.sendPort);
 
-  Map<String, Completer<void>> tasks = {};
+  Map<String, Completer> tasks = {};
 
   receivePort.listen((dynamic message) async {
     if (message is ImageConvertThreadRequest) {

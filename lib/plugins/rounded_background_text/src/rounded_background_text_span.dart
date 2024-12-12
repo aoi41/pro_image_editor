@@ -10,6 +10,8 @@ import 'rounded_background_text.dart';
 ///  * [TextSpan], a node that represents text in an [InlineSpan] tree.
 ///  * [RoundedBackgroundText], which renders rounded background texts
 class RoundedBackgroundTextSpan extends WidgetSpan {
+  final String text;
+
   /// Creates a text with rounded background with the given values
   RoundedBackgroundTextSpan({
     required this.text,
@@ -20,6 +22,7 @@ class RoundedBackgroundTextSpan extends WidgetSpan {
     super.baseline,
     double? innerRadius,
     double? outerRadius,
+    String? heroTag,
     TextAlign? textAlign,
   }) : super(
           child: Padding(
@@ -37,8 +40,6 @@ class RoundedBackgroundTextSpan extends WidgetSpan {
             ),
           ),
         );
-  // ignore: public_member_api_docs
-  final String text;
 
   TextSpan get _textSpan => TextSpan(text: text);
 

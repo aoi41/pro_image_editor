@@ -8,22 +8,6 @@ import '../../pro_image_editor.dart';
 
 /// Represents the toolbar for the crop/rotate functionality in the frosted-glass theme.
 class FrostedGlassCropRotateToolbar extends StatefulWidget {
-  /// Creates a [FrostedGlassCropRotateToolbar].
-  ///
-  /// This toolbar is designed for image editing applications, providing
-  /// interactive buttons for cropping and rotating functionalities. It is part
-  /// of the frosted-glass themed user interface.
-  /// ```
-  const FrostedGlassCropRotateToolbar({
-    super.key,
-    required this.configs,
-    required this.onCancel,
-    required this.onRotate,
-    required this.onDone,
-    required this.onReset,
-    required this.openAspectRatios,
-  });
-
   /// The configuration for the image editor.
   final ProImageEditorConfigs configs;
 
@@ -41,6 +25,16 @@ class FrostedGlassCropRotateToolbar extends StatefulWidget {
 
   /// Callback function for opening aspect ratios.
   final Function() openAspectRatios;
+
+  const FrostedGlassCropRotateToolbar({
+    super.key,
+    required this.configs,
+    required this.onCancel,
+    required this.onRotate,
+    required this.onDone,
+    required this.onReset,
+    required this.openAspectRatios,
+  });
 
   @override
   State<FrostedGlassCropRotateToolbar> createState() =>
@@ -69,35 +63,28 @@ class _FrostedGlassCropRotateToolbar
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (widget.configs.cropRotateEditorConfigs.canRotate)
-                IconButton(
-                  onPressed: widget.onRotate,
-                  tooltip: widget.configs.i18n.cropRotateEditor.rotate,
-                  icon: Icon(widget.configs.icons.cropRotateEditor.rotate),
-                  color: widget.configs.imageEditorTheme.cropRotateEditor
-                      .appBarForegroundColor,
-                )
-              else
-                const SizedBox.shrink(),
-              if (widget.configs.cropRotateEditorConfigs.canReset)
-                CupertinoButton(
-                  onPressed: widget.onReset,
-                  padding: padding,
-                  child: Text(
-                    widget.configs.i18n.cropRotateEditor.reset,
-                    style: style,
-                  ),
+              IconButton(
+                onPressed: widget.onRotate,
+                tooltip: widget.configs.i18n.cropRotateEditor.rotate,
+                icon: Icon(widget.configs.icons.cropRotateEditor.rotate),
+                color: widget.configs.imageEditorTheme.cropRotateEditor
+                    .appBarForegroundColor,
+              ),
+              CupertinoButton(
+                onPressed: widget.onReset,
+                padding: padding,
+                child: Text(
+                  widget.configs.i18n.cropRotateEditor.reset,
+                  style: style,
                 ),
-              if (widget.configs.cropRotateEditorConfigs.canChangeAspectRatio)
-                IconButton(
-                  onPressed: widget.openAspectRatios,
-                  tooltip: widget.configs.i18n.cropRotateEditor.ratio,
-                  icon: Icon(widget.configs.icons.cropRotateEditor.aspectRatio),
-                  color: widget.configs.imageEditorTheme.cropRotateEditor
-                      .appBarForegroundColor,
-                )
-              else
-                const SizedBox.shrink(),
+              ),
+              IconButton(
+                onPressed: widget.openAspectRatios,
+                tooltip: widget.configs.i18n.cropRotateEditor.ratio,
+                icon: Icon(widget.configs.icons.cropRotateEditor.aspectRatio),
+                color: widget.configs.imageEditorTheme.cropRotateEditor
+                    .appBarForegroundColor,
+              ),
             ],
           ),
         ),

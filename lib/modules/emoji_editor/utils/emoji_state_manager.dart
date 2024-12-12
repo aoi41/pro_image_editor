@@ -1,10 +1,13 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-/// Manages the state of the emoji picker, including the active category.
+// Package imports:
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+
 class EmojiStateManager extends InheritedWidget {
-  /// Constructor for EmojiStateManager, accepting a key, child widget,
-  /// active category, and a function to update the active category.
+  final Category activeCategory;
+  final Function(Category) setActiveCategory;
+
   const EmojiStateManager({
     super.key,
     required super.child,
@@ -12,18 +15,10 @@ class EmojiStateManager extends InheritedWidget {
     required this.setActiveCategory,
   });
 
-  /// The currently active emoji category.
-  final Category activeCategory;
-
-  /// Function to update the active emoji category.
-  final Function(Category) setActiveCategory;
-
-  /// Retrieves the closest [EmojiStateManager] instance in the widget tree.
   static EmojiStateManager? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<EmojiStateManager>();
   }
 
-  /// Determines if the widget should notify listeners about changes.
   @override
   bool updateShouldNotify(EmojiStateManager oldWidget) {
     return oldWidget.activeCategory != activeCategory;

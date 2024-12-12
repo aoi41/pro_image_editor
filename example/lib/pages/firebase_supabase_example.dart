@@ -1,18 +1,17 @@
 // Flutter imports:
-// Project imports:
-import 'package:example/utils/example_constants.dart';
-// Package imports:
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// Project imports:
+import 'package:example/utils/example_constants.dart';
 import '../utils/example_helper.dart';
 
-/// The Firebase-Supabase example
 class FirebaseSupabaseExample extends StatefulWidget {
-  /// Creates a new [FirebaseSupabaseExample] widget.
   const FirebaseSupabaseExample({super.key});
 
   @override
@@ -56,7 +55,7 @@ class _FirebaseSupabaseExampleState extends State<FirebaseSupabaseExample>
         await precacheImage(
             AssetImage(ExampleConstants.of(context)!.demoAssetPath), context);
         if (!context.mounted) return;
-        await Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => _buildEditor(),
@@ -82,8 +81,7 @@ class _FirebaseSupabaseExampleState extends State<FirebaseSupabaseExample>
             await _uploadSupabase(bytes);
           } catch (e) {
             debugPrint(
-                'Failed: You need to completely set up firebase or supabase in '
-                'your project.');
+                'Failed: You need to completly set up firebase or supabase in your project.');
           }
           setGenerationTime();
         },

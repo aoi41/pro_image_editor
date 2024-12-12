@@ -3,36 +3,17 @@ import 'dart:math';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:pro_image_editor/models/tune_editor/tune_adjustment_matrix.dart';
-import 'package:pro_image_editor/pro_image_editor.dart';
 
 // Project imports:
 import '../../../models/crop_rotate_editor/transform_factors.dart';
+import '../../../models/editor_configs/pro_image_editor_configs.dart';
+import '../../../models/editor_image.dart';
 import '../types/filter_matrix.dart';
+import '../utils/filter_generator/filter_model.dart';
+import '../utils/filter_generator/filter_presets.dart';
 import 'filtered_image.dart';
 
-/// A widget for displaying a list of filter editor items, allowing users
-/// to select and apply filters to an image.
 class FilterEditorItemList extends StatefulWidget {
-  /// Constructor for creating an instance of FilterEditorItemList.
-  const FilterEditorItemList({
-    super.key,
-    required this.editorImage,
-    this.activeFilters,
-    this.activeTuneAdjustments = const [],
-    this.blurFactor,
-    this.itemScaleFactor,
-    this.transformConfigs,
-    this.mainImageSize = Size.zero,
-    this.mainBodySize = Size.zero,
-    required this.selectedFilter,
-    required this.onSelectFilter,
-    required this.configs,
-    this.borderRadius,
-    this.listHeight = 104.0,
-    this.previewImageSize = const Size(64, 64),
-  });
-
   /// The EditorImage class represents an image with multiple sources,
   /// including bytes, file, network URL, and asset path.
   final EditorImage editorImage;
@@ -42,26 +23,20 @@ class FilterEditorItemList extends StatefulWidget {
 
   /// Specifies the scale factor for items.
   ///
-  /// If provided, this value scales the items in the editor by the specified
-  /// factor.
+  /// If provided, this value scales the items in the editor by the specified factor.
   final double? itemScaleFactor;
 
   /// Specifies the list of active filter state histories.
   ///
-  /// If provided, this list contains the history of active filters applied to
-  /// the image.
+  /// If provided, this list contains the history of active filters applied to the image.
   final FilterMatrix? activeFilters;
-
-  /// Specifies the list of active tune adjustments state histories.
-  final List<TuneAdjustmentMatrix> activeTuneAdjustments;
 
   /// Specifies the blur factor.
   final double? blurFactor;
 
   /// Specifies the selected filter.
   ///
-  /// This property represents the currently selected filter for the image
-  /// editor.
+  /// This property represents the currently selected filter for the image editor.
   final FilterMatrix selectedFilter;
 
   /// The transform configurations how the image should be initialized.
@@ -69,8 +44,7 @@ class FilterEditorItemList extends StatefulWidget {
 
   /// Callback function for selecting a filter.
   ///
-  /// This function is called when a filter is selected in the editor. It takes
-  /// a [FilterModel] as a parameter, representing the selected filter.
+  /// This function is called when a filter is selected in the editor. It takes a [FilterModel] as a parameter, representing the selected filter.
   final Function(FilterModel filter) onSelectFilter;
 
   /// The size of the image with layers applied.
@@ -79,14 +53,19 @@ class FilterEditorItemList extends StatefulWidget {
   /// The size of the body with layers applied.
   final Size mainBodySize;
 
-  /// The size of the preview image displayed in the editor.
-  final Size previewImageSize;
-
-  /// The border radius applied to the preview image or UI element.
-  final BorderRadius? borderRadius;
-
-  /// The height of the list in the editor's UI.
-  final double listHeight;
+  const FilterEditorItemList({
+    super.key,
+    required this.editorImage,
+    this.activeFilters,
+    this.blurFactor,
+    this.itemScaleFactor,
+    this.transformConfigs,
+    this.mainImageSize = Size.zero,
+    this.mainBodySize = Size.zero,
+    required this.selectedFilter,
+    required this.onSelectFilter,
+    required this.configs,
+  });
 
   @override
   State<FilterEditorItemList> createState() => _FilterEditorItemListState();
@@ -95,8 +74,7 @@ class FilterEditorItemList extends StatefulWidget {
 class _FilterEditorItemListState extends State<FilterEditorItemList> {
   late ScrollController _scrollCtrl;
 
-  /// A list of `ColorFilterGenerator` objects that define the image filters
-  /// available in the editor.
+  /// A list of `ColorFilterGenerator` objects that define the image filters available in the editor.
   List<FilterModel> get _filters =>
       widget.configs.filterEditorConfigs.filterList ?? presetFiltersList;
 
@@ -120,7 +98,7 @@ class _FilterEditorItemListState extends State<FilterEditorItemList> {
   /// Builds a horizontal list of filter preview buttons.
   Widget _buildFilterList() {
     return SizedBox(
-      height: widget.listHeight,
+      height: 104,
       child: Scrollbar(
         controller: _scrollCtrl,
         scrollbarOrientation: ScrollbarOrientation.bottom,
@@ -177,58 +155,45 @@ class _FilterEditorItemListState extends State<FilterEditorItemList> {
         widget.itemScaleFactor,
         () => setState(() => widget.onSelectFilter(filter)),
         _buildPreviewImage(
-          widget.previewImageSize,
+          const Size(64, 64),
           filter,
         ),
         ValueKey('Filter-${filter.name}-$index'),
       );
     }
 
-    return FadeInUp(
-      duration: widget.configs.filterEditorConfigs.fadeInUpDuration,
-      delay: widget.configs.filterEditorConfigs.fadeInUpStaggerDelayDuration *
-          index,
-      child: GestureDetector(
-        key: ValueKey('Filter-${filter.name}-$index'),
-        onTap: () {
-          widget.onSelectFilter(filter);
-        },
-        child: Column(
-          children: [
-            _buildPreviewImage(
-              widget.previewImageSize,
-              filter,
-              margin: const EdgeInsets.only(bottom: 4),
-              borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
-              decoration: BoxDecoration(
-                borderRadius: widget.borderRadius ?? BorderRadius.circular(4),
-                border: Border.all(
-                  color: const Color(0xFF242424),
-                  width: 1,
-                ),
+    return GestureDetector(
+      key: ValueKey('Filter-${filter.name}-$index'),
+      onTap: () {
+        widget.onSelectFilter(filter);
+      },
+      child: Column(
+        children: [
+          _buildPreviewImage(
+            const Size(64, 64),
+            filter,
+            margin: const EdgeInsets.only(bottom: 4),
+            borderRadius: BorderRadius.circular(4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(
+                color: const Color(0xFF242424),
+                width: 1,
               ),
             ),
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: widget.previewImageSize.width,
-              ),
-              child: Text(
-                widget.configs.i18n.filterEditor.filters
-                    .getFilterI18n(filter.name),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: isSelected
-                      ? widget.configs.imageEditorTheme.filterEditor
-                          .previewSelectedTextColor
-                      : widget.configs.imageEditorTheme.filterEditor
-                          .previewTextColor,
-                ),
-              ),
+          ),
+          Text(
+            widget.configs.i18n.filterEditor.filters.getFilterI18n(filter.name),
+            style: TextStyle(
+              fontSize: 11,
+              color: isSelected
+                  ? widget.configs.imageEditorTheme.filterEditor
+                      .previewSelectedTextColor
+                  : widget
+                      .configs.imageEditorTheme.filterEditor.previewTextColor,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -292,7 +257,6 @@ class _FilterEditorItemListState extends State<FilterEditorItemList> {
                     ...(widget.activeFilters ?? []),
                     ...filter.filters,
                   ],
-                  tuneAdjustments: widget.activeTuneAdjustments,
                   configs: widget.configs,
                   blurFactor: widget.blurFactor ?? 0,
                 ),

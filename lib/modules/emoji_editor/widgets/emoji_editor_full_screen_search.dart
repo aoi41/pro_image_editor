@@ -1,45 +1,42 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 
-/// Full-screen search view for emoji editor, allowing emoji search and
-/// selection.
+// Package imports:
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+
 class EmojiEditorFullScreenSearchView extends StatefulWidget {
-  /// Constructor for creating an instance of EmojiEditorFullScreenSearchView.
+  /// Config for customizations
+  final Config config;
+
+  /// State that holds current emoji data
+  final EmojiViewState state;
+
   const EmojiEditorFullScreenSearchView({
     super.key,
     required this.config,
     required this.state,
   });
 
-  /// Configuration for customizations of the emoji picker.
-  final Config config;
-
-  /// State that holds current emoji data.
-  final EmojiViewState state;
-
-  /// Creates the state for EmojiEditorFullScreenSearchView.
   @override
   EmojiEditorFullScreenSearchViewState createState() =>
       EmojiEditorFullScreenSearchViewState();
 }
 
-/// State class for EmojiEditorFullScreenSearchView, implementing
-/// SkinToneOverlayStateMixin.
 class EmojiEditorFullScreenSearchViewState
     extends State<EmojiEditorFullScreenSearchView>
     with SkinToneOverlayStateMixin {
-  /// Search results stored as a list of Emoji objects.
+  /// Search results
   final results = List<Emoji>.empty(growable: true);
 
-  /// Utility class for emoji picker operations.
+  /// Emoji picker utils
   final utils = EmojiPickerUtils();
 
-  /// Initiates a search for emojis based on input text.
+  /// Search emojis
   void search(String text) {
     onTextInputChanged(text);
   }
 
-  /// Callback function triggered when text input changes.
+  /// On text input changed callback
   void onTextInputChanged(String text) {
     links.clear();
     results.clear();
@@ -50,7 +47,6 @@ class EmojiEditorFullScreenSearchViewState
         );
   }
 
-  /// Updates the search results with the found emojis.
   void _updateResults(List<Emoji> emojis) {
     results
       ..clear()
@@ -60,7 +56,6 @@ class EmojiEditorFullScreenSearchViewState
     });
   }
 
-  /// Builds the widget tree for the full-screen search view.
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -88,7 +83,7 @@ class EmojiEditorFullScreenSearchViewState
     });
   }
 
-  /// Builds an emoji cell widget.
+  /// Build emoji cell
   Widget buildEmoji(Emoji emoji, double emojiSize, double emojiBoxSize) {
     return addSkinToneTargetIfAvailable(
       hasSkinTone: emoji.hasSkinTone,
@@ -119,7 +114,6 @@ class EmojiEditorFullScreenSearchViewState
     );
   }
 
-  /// Callback function when a skin-toned emoji is selected.
   void _onSkinTonedEmojiSelected(Category? category, Emoji emoji) {
     widget.state.onEmojiSelected(category, emoji);
     closeSkinToneOverlay();

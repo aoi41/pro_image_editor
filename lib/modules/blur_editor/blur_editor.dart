@@ -28,16 +28,19 @@ import '../filter_editor/widgets/filtered_image.dart';
 /// - `BlurEditor.asset`: Loads an image from an asset.
 /// - `BlurEditor.network`: Loads an image from a network URL.
 /// - `BlurEditor.memory`: Loads an image from memory as a `Uint8List`.
-/// - `BlurEditor.autoSource`: Automatically selects the source based on
-/// provided parameters.
+/// - `BlurEditor.autoSource`: Automatically selects the source based on provided parameters.
 class BlurEditor extends StatefulWidget
     with StandaloneEditor<BlurEditorInitConfigs> {
+  @override
+  final BlurEditorInitConfigs initConfigs;
+  @override
+  final EditorImage editorImage;
+
   /// Constructs a `BlurEditor` widget.
   ///
   /// The [key] parameter is used to provide a key for the widget.
   /// The [editorImage] parameter specifies the image to be edited.
-  /// The [initConfigs] parameter specifies the initialization configurations
-  /// for the editor.
+  /// The [initConfigs] parameter specifies the initialization configurations for the editor.
   const BlurEditor._({
     super.key,
     required this.editorImage,
@@ -96,8 +99,7 @@ class BlurEditor extends StatefulWidget
     );
   }
 
-  /// Constructs a `BlurEditor` widget with an image loaded automatically based
-  /// on the provided source.
+  /// Constructs a `BlurEditor` widget with an image loaded automatically based on the provided source.
   ///
   /// Either [byteArray], [file], [networkUrl], or [assetPath] must be provided.
   factory BlurEditor.autoSource({
@@ -134,14 +136,9 @@ class BlurEditor extends StatefulWidget
       );
     } else {
       throw ArgumentError(
-          "Either 'byteArray', 'file', 'networkUrl' or 'assetPath' must "
-          'be provided.');
+          "Either 'byteArray', 'file', 'networkUrl' or 'assetPath' must be provided.");
     }
   }
-  @override
-  final BlurEditorInitConfigs initConfigs;
-  @override
-  final EditorImage editorImage;
 
   @override
   createState() => BlurEditorState();
@@ -154,7 +151,7 @@ class BlurEditorState extends State<BlurEditor>
         ImageEditorConvertedCallbacks,
         StandaloneEditorState<BlurEditor, BlurEditorInitConfigs> {
   /// Update the image with the applied blur and the slider value.
-  late final StreamController<void> _uiBlurStream;
+  late final StreamController _uiBlurStream;
 
   /// Represents the selected blur state.
   late double blurFactor;
@@ -185,8 +182,7 @@ class BlurEditorState extends State<BlurEditor>
     super.setState(fn);
   }
 
-  /// Handles the "Done" action, either by applying changes or closing the
-  /// editor.
+  /// Handles the "Done" action, either by applying changes or closing the editor.
   void done() async {
     doneEditing(
       returnValue: blurFactor,
@@ -195,16 +191,11 @@ class BlurEditorState extends State<BlurEditor>
     blurEditorCallbacks?.handleDone();
   }
 
-  /// Set the blur factor and update the UI.
-  void setBlurFactor(double value) {
+  /// Handles changes in the blur factor value.
+  void _onChanged(double value) {
     blurFactor = value;
     _uiBlurStream.add(null);
     blurEditorCallbacks?.handleBlurFactorChange(value);
-  }
-
-  /// Handles changes in the blur factor value.
-  void _onChanged(double value) {
-    setBlurFactor(value);
   }
 
   /// Handles the end of changes in the blur factor value.
@@ -222,19 +213,13 @@ class BlurEditorState extends State<BlurEditor>
           tooltipTheme: theme.tooltipTheme.copyWith(preferBelow: true)),
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: imageEditorTheme.uiOverlayStyle,
-        child: SafeArea(
-          top: blurEditorConfigs.safeArea.top,
-          bottom: blurEditorConfigs.safeArea.bottom,
-          left: blurEditorConfigs.safeArea.left,
-          right: blurEditorConfigs.safeArea.right,
-          child: RecordInvisibleWidget(
-            controller: screenshotCtrl,
-            child: Scaffold(
-              backgroundColor: imageEditorTheme.blurEditor.background,
-              appBar: _buildAppBar(),
-              body: _buildBody(),
-              bottomNavigationBar: _buildBottomNavBar(),
-            ),
+        child: RecordInvisibleWidget(
+          controller: screenshotCtrl,
+          child: Scaffold(
+            backgroundColor: imageEditorTheme.blurEditor.background,
+            appBar: _buildAppBar(),
+            body: _buildBody(),
+            bottomNavigationBar: _buildBottomNavBar(),
           ),
         ),
       ),
@@ -275,66 +260,52 @@ class BlurEditorState extends State<BlurEditor>
   Widget _buildBody() {
     return LayoutBuilder(builder: (context, constraints) {
       editorBodySize = constraints.biggest;
-      return Stack(
-        alignment: Alignment.center,
-        fit: StackFit.expand,
-        children: [
-          ContentRecorder(
-            controller: screenshotCtrl,
-            child: Stack(
-              alignment: Alignment.center,
-              fit: StackFit.expand,
-              children: [
-                Hero(
-                  tag: heroTag,
-                  createRectTween: (begin, end) =>
-                      RectTween(begin: begin, end: end),
-                  child: TransformedContentGenerator(
-                    configs: configs,
-                    transformConfigs:
-                        initialTransformConfigs ?? TransformConfigs.empty(),
-                    child: StreamBuilder(
-                        stream: _uiBlurStream.stream,
-                        builder: (context, snapshot) {
-                          return FilteredImage(
-                            width: getMinimumSize(mainImageSize, editorBodySize)
-                                .width,
-                            height:
-                                getMinimumSize(mainImageSize, editorBodySize)
-                                    .height,
-                            configs: configs,
-                            image: editorImage,
-                            filters: appliedFilters,
-                            tuneAdjustments: appliedTuneAdjustments,
-                            blurFactor: blurFactor,
-                          );
-                        }),
-                  ),
-                ),
-                if (blurEditorConfigs.showLayers && layers != null)
-                  LayerStack(
-                    transformHelper: TransformHelper(
-                      mainBodySize:
-                          getMinimumSize(mainBodySize, editorBodySize),
-                      mainImageSize:
-                          getMinimumSize(mainImageSize, editorBodySize),
-                      transformConfigs: initialTransformConfigs,
-                      editorBodySize: editorBodySize,
-                    ),
-                    configs: configs,
-                    layers: layers!,
-                    clipBehavior: Clip.none,
-                  ),
-                if (customWidgets.blurEditor.bodyItemsRecorded != null)
-                  ...customWidgets.blurEditor.bodyItemsRecorded!(
-                      this, rebuildController.stream),
-              ],
+      return ContentRecorder(
+        controller: screenshotCtrl,
+        child: Stack(
+          alignment: Alignment.center,
+          fit: StackFit.expand,
+          children: [
+            Hero(
+              tag: heroTag,
+              createRectTween: (begin, end) =>
+                  RectTween(begin: begin, end: end),
+              child: TransformedContentGenerator(
+                configs: configs,
+                transformConfigs: transformConfigs ?? TransformConfigs.empty(),
+                child: StreamBuilder(
+                    stream: _uiBlurStream.stream,
+                    builder: (context, snapshot) {
+                      return FilteredImage(
+                        width:
+                            getMinimumSize(mainImageSize, editorBodySize).width,
+                        height: getMinimumSize(mainImageSize, editorBodySize)
+                            .height,
+                        configs: configs,
+                        image: editorImage,
+                        filters: appliedFilters,
+                        blurFactor: blurFactor,
+                      );
+                    }),
+              ),
             ),
-          ),
-          if (customWidgets.blurEditor.bodyItems != null)
-            ...customWidgets.blurEditor.bodyItems!(
-                this, rebuildController.stream),
-        ],
+            if (blurEditorConfigs.showLayers && layers != null)
+              LayerStack(
+                transformHelper: TransformHelper(
+                  mainBodySize: getMinimumSize(mainBodySize, editorBodySize),
+                  mainImageSize: getMinimumSize(mainImageSize, editorBodySize),
+                  transformConfigs: transformConfigs,
+                  editorBodySize: editorBodySize,
+                ),
+                configs: configs,
+                layers: layers!,
+                clipBehavior: Clip.none,
+              ),
+            if (customWidgets.blurEditor.bodyItems != null)
+              ...customWidgets.blurEditor.bodyItems!(
+                  this, rebuildController.stream),
+          ],
+        ),
       );
     });
   }

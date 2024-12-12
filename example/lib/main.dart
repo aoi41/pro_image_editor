@@ -1,22 +1,20 @@
 // Flutter imports:
-import 'package:example/pages/crop_to_main_editor.dart';
 import 'package:example/pages/design_examples/design_example.dart';
-import 'package:example/pages/frame_example.dart';
 import 'package:example/pages/zoom_move_editor_example.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pro_image_editor/pro_image_editor.dart';
+
 // Package imports:
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// Project imports:
+import '/utils/example_constants.dart';
 import '/pages/firebase_supabase_example.dart';
 import '/pages/import_export_example.dart';
 import '/pages/pick_image_example.dart';
 import '/pages/selectable_layer_example.dart';
-// Project imports:
-import '/utils/example_constants.dart';
 import 'pages/custom_appbar_bottombar_example.dart';
 import 'pages/default_example.dart';
 import 'pages/generation_configs_example.dart';
@@ -41,9 +39,7 @@ void main() async {
   runApp(const MyApp());
 }
 
-/// The root widget of the application.
 class MyApp extends StatelessWidget {
-  /// Creates a new [MyApp] widget.
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -61,9 +57,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// The home page of the application.
 class MyHomePage extends StatefulWidget {
-  /// Creates a new [MyHomePage] widget.
   const MyHomePage({super.key});
 
   @override
@@ -77,7 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
     const DefaultExample(),
     const DesignExample(),
     const StandaloneExample(),
-    const CropToMainEditorExample(),
     const SignatureDrawingExample(),
     const StickersExample(),
     const FirebaseSupabaseExample(),
@@ -89,8 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const GoogleFontExample(),
     const CustomAppbarBottombarExample(),
     const ImportExportExample(),
-    const MovableBackgroundImageExample(),
-    const FrameExample(),
+    const MoveableBackgroundImageExample(),
     const ZoomMoveEditorExample(),
     const ImageFormatConvertExample(),
   ];
@@ -112,10 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return ExampleConstants(
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
-        child: ExtendedPopScope(
-          child: Scaffold(
-            body: SafeArea(child: _buildCard()),
-          ),
+        child: Scaffold(
+          body: SafeArea(child: _buildCard()),
         ),
       ),
     );
@@ -204,5 +194,5 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-/// It's handy to then extract the Supabase client in a variable for later uses
+// It's handy to then extract the Supabase client in a variable for later uses
 final supabase = Supabase.instance.client;

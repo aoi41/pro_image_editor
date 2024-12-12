@@ -29,7 +29,7 @@ void main() {
     });
     testWidgets('Initializes with network constructor',
         (WidgetTester tester) async {
-      await mockNetworkImagesFor(() async {
+      mockNetworkImagesFor(() async {
         await tester.pumpWidget(MaterialApp(
           home: PaintingEditor.network(
             fakeNetworkImage,
@@ -92,7 +92,7 @@ void main() {
         ),
       ));
 
-      /// Test if paintModes will change correctly
+      /// Test if paintmodes will change correctly
       key.currentState!.setMode(PaintModeE.freeStyle);
       expect(key.currentState!.paintMode, PaintModeE.freeStyle);
 
@@ -114,7 +114,7 @@ void main() {
         ),
       ));
 
-      /// Test if paintModes will change correctly
+      /// Test if paintmodes will change correctly
       for (double i = 1; i <= 10; i++) {
         key.currentState!.setStrokeWidth(i);
         expect(key.currentState!.strokeWidth, i);

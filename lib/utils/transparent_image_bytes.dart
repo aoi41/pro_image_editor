@@ -1,7 +1,6 @@
 // Dart imports:
 import 'dart:typed_data';
 
-/// Transparent image
 final transparentBytes = Uint8List.fromList([
   0x89,
   0x50,

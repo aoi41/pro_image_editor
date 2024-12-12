@@ -17,7 +17,7 @@ void main() {
     customWidgets: ImageEditorCustomWidgets(
       circularProgressIndicator: SizedBox.shrink(),
     ),
-    imageGenerationConfigs: ImageGenerationConfigs(
+    imageGenerationConfigs: ImageGeneratioConfigs(
       generateInsideSeparateThread: false,
       generateImageInBackground: false,
     ),
@@ -195,8 +195,8 @@ void main() {
     });
   });
 
-  group('When applying constraints to the opened bottom sheet', () {
-    const widgetKey = ValueKey('example-widget');
+  group("When applying constraints to the opened bottom sheet", () {
+    const widgetKey = ValueKey("example-widget");
     const expectedConstraints = BoxConstraints(
       maxWidth: 720,
     );
@@ -211,17 +211,14 @@ void main() {
               onImageEditingComplete: (Uint8List bytes) async {},
             ),
             configs: ProImageEditorConfigs(
-              paintEditorConfigs: const PaintEditorConfigs(enabled: false),
-              textEditorConfigs: const TextEditorConfigs(enabled: false),
-              cropRotateEditorConfigs:
-                  const CropRotateEditorConfigs(enabled: false),
               emojiEditorConfigs: const EmojiEditorConfigs(
                 enabled: false,
               ),
               stickerEditorConfigs: StickerEditorConfigs(
                 enabled: true,
-                buildStickers: (setLayer, scrollController) =>
-                    Container(key: widgetKey),
+                buildStickers: (setLayer, scrollController) => Container(
+                  key: widgetKey,
+                ),
               ),
               imageEditorTheme: ImageEditorTheme(
                 stickerEditor: StickerEditorTheme(
@@ -233,6 +230,7 @@ void main() {
           ),
         ),
       );
+
       final openBtn = find.byKey(const ValueKey('open-sticker-editor-btn'));
       expect(openBtn, findsOneWidget);
       await tester.tap(openBtn);
@@ -258,10 +256,6 @@ void main() {
               onImageEditingComplete: (Uint8List bytes) async {},
             ),
             configs: ProImageEditorConfigs(
-              paintEditorConfigs: const PaintEditorConfigs(enabled: false),
-              textEditorConfigs: const TextEditorConfigs(enabled: false),
-              cropRotateEditorConfigs:
-                  const CropRotateEditorConfigs(enabled: false),
               emojiEditorConfigs: const EmojiEditorConfigs(
                 enabled: false,
               ),

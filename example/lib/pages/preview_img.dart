@@ -5,81 +5,40 @@ import 'dart:ui' as ui;
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:intl/intl.dart';
-import 'package:mime/mime.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
+import 'package:mime/mime.dart';
 
 import '../utils/pixel_transparent_painter.dart';
 
-/// A page that displays a preview of the generated image.
-///
-/// The [PreviewImgPage] widget is a stateful widget that shows a preview of
-/// an image created using the provided [imgBytes]. It also supports showing
-/// a thumbnail of the original image if [showThumbnail] is set to true.
-///
-/// The page can display additional information such as [generationTime], the
-/// original raw image as [rawOriginalImage], and optional [generationConfigs]
-/// used during the image creation process.
-///
-/// If [showThumbnail] is set to true, [rawOriginalImage] must be provided.
-///
-/// Example usage:
-/// ```dart
-/// PreviewImgPage(
-///   imgBytes: generatedImageBytes,
-///   generationTime: 1200,
-///   rawOriginalImage: originalImage,
-///   showThumbnail: true,
-/// );
-/// ```
 class PreviewImgPage extends StatefulWidget {
-  /// Creates a new [PreviewImgPage] widget.
-  ///
-  /// The [imgBytes] parameter is required and contains the generated image
-  /// data to be displayed. The [generationTime] is optional and represents
-  /// the time taken to generate the image. If [showThumbnail] is true,
-  /// [rawOriginalImage] must be provided.
+  final Uint8List imgBytes;
+  final double? generationTime;
+  final bool showThumbnail;
+  final ui.Image? rawOriginalImage;
+  final ImageGeneratioConfigs? generatioConfigs;
+
   const PreviewImgPage({
     super.key,
     required this.imgBytes,
     this.generationTime,
     this.rawOriginalImage,
-    this.generationConfigs,
+    this.generatioConfigs,
     this.showThumbnail = false,
-  }) : assert(
-          showThumbnail == false || rawOriginalImage != null,
-          'rawOriginalImage is required if you want to display a thumbnail.',
-        );
-
-  /// The image data in bytes to be displayed.
-  final Uint8List imgBytes;
-
-  /// The time taken to generate the image, in milliseconds.
-  final double? generationTime;
-
-  /// Whether or not to show a thumbnail of the original image.
-  final bool showThumbnail;
-
-  /// The original raw image, required if [showThumbnail] is true.
-  final ui.Image? rawOriginalImage;
-
-  /// Optional configurations used during image generation.
-  final ImageGenerationConfigs? generationConfigs;
+  }) : assert(showThumbnail == false || rawOriginalImage != null,
+            'rawOriginalImage is required if you want to display a thumbnail.');
 
   @override
   State<PreviewImgPage> createState() => _PreviewImgPageState();
 }
 
-/// The state for the [PreviewImgPage] widget.
-///
-/// This class manages the logic and display of the preview image and optional
-/// thumbnail, along with any associated generation information.
 class _PreviewImgPageState extends State<PreviewImgPage> {
   final _valueStyle = const TextStyle(fontStyle: FontStyle.italic);
 
   Future<ImageInfos>? _decodedImageInfos;
-  String _contentType = 'Unknown';
+  String _contentType = 'Unkown';
   double? _generationTime;
 
   Future<Uint8List?>? _highQualityGeneration;
@@ -97,7 +56,7 @@ class _PreviewImgPageState extends State<PreviewImgPage> {
   }
 
   void _setContentType() {
-    _contentType = lookupMimeType('', headerBytes: _imageBytes) ?? 'Unknown';
+    _contentType = lookupMimeType('', headerBytes: _imageBytes) ?? 'Unkown';
   }
 
   String formatBytes(int bytes, [int decimals = 2]) {
@@ -120,7 +79,7 @@ class _PreviewImgPageState extends State<PreviewImgPage> {
           widget.rawOriginalImage!,
 
           /// Set optional configs for the output
-          configs: widget.generationConfigs ?? const ImageGenerationConfigs(),
+          configs: widget.generatioConfigs ?? const ImageGeneratioConfigs(),
           context: context,
         ).then((res) {
           if (res == null) return res;
@@ -240,11 +199,7 @@ class _PreviewImgPageState extends State<PreviewImgPage> {
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(
                             snapshot.connectionState == ConnectionState.done
-                                ? '${_numberFormatter.format(
-                                    snapshot.data!.rawSize.width.round(),
-                                  )} x ${_numberFormatter.format(
-                                    snapshot.data!.rawSize.height.round(),
-                                  )}'
+                                ? '${_numberFormatter.format(snapshot.data!.rawSize.width.round())} x ${_numberFormatter.format(snapshot.data!.rawSize.height.round())}'
                                 : 'Loading...',
                             style: _valueStyle,
                             textAlign: TextAlign.right,

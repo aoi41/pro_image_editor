@@ -1,129 +1,5 @@
 # Changelog
 
-## 6.2.0
-- **FEAT**(Main-Editor): Added `updateBackgroundImage` method to update the editor's background image.
-
-## 6.1.6
-- **STYLE**: format dart code 
-
-## 6.1.5
-- **FIX**(import): Fixed an issue where imported layers didn't scale correctly on different screen sizes. This resolves issue [#272](https://github.com/hm21/pro_image_editor/issues/272)
-
-## 6.1.4
-- **FIX**(zoom): Fixed an issue where the minimum zoom level setting had no effect, ensuring proper enforcement of zoom boundaries in the viewer. This resolves issue [#266](https://github.com/hm21/pro_image_editor/issues/266)
-
-## 6.1.3
-- **FIX**(keyboard): resolve issue that escape key throw an error when the context menu is open. This resolves issue [#260](https://github.com/hm21/pro_image_editor/issues/260)
-
-## 6.1.2
-- **STYLE(AppBar)**: moved close action to AppBar's leading parameter for improved layout consistency.
-- **STYLE(AppBar)**: updated IconButtons to use default 8-point all-around padding, enhancing visual balance.
-- **STYLE(AppBar)**: adjusted loading indicator padding to a multiple of 2 to align with design system standards.
-
-## 6.1.1
-- **FIX**(CustomWidgets): resolve issue preventing user from using custom widget `removeLayerArea`.
-
-## 6.1.0
-- **FEAT**(Layer): Introduce the `enableInteraction` configuration in the `Layer` class to toggle interaction capabilities.
-- **FEAT**(CustomWidgets): Add `bodyItemsRecorded` to all editors which can direct generate the final image. This option enables the recording of custom body widgets, enhancing frame functionality.
-- **DOC**(Frame): Add an example how users can add a frame.
-
-## 6.0.2
-- **FIX**(Recorder): Resolve issue where the editor would incorrectly capture drawing boundaries if the user set `captureOnlyDrawingBounds` to `true`. This resolves issue [#249](https://github.com/hm21/pro_image_editor/issues/249)
-
-## 6.0.1
-- **FIX**(Generation-Configs): Removed unnecessary assert for `captureOnlyBackgroundImageArea` and `captureOnlyDrawingBounds`, which was blocking certain combinations for generating transparent images. Details discussed [here](https://github.com/hm21/pro_image_editor/issues/210#issuecomment-2433847115).
-
-## 6.0.0
-- **FEAT**(Tune-Editor): Introduced the new "Tune" editor, enabling users to adjust image contrast, saturation, and brightness for enhanced control over image tuning.
-
-- **CHORE**(Dependency): Update `image` dependency to version `4.3.0`.
-- **CHORE**(Dependency): Update `vibration` dependency to version `2.0.1`.
-- **CHORE**(Dependency): Update `mime` dependency to version `2.0.0`.
-
-- **FIX**(Example): Resolve the issue where the `movable_background_image` example displays the helper lines in the wrong position.
-- **FIX**(Example): Resolve all linting issues in the example code.
-
-## 5.4.2
-- **FIX**(Painting-Editor): Resolve issue where undo-redo action capturing the incorrect image. This resolves issue [#239](https://github.com/hm21/pro_image_editor/issues/239)
-
-## 5.4.1
-- **FEAT**(Emoji-Editor): Update the emoji-editor to version `3.1.0` with custom view order configuration support.
-
-## 5.4.0
-- **FEAT**(Filter): Filter-preview widgets are now animated with a default fadeInUp effect.
-- **FEAT**(Layer-Interaction): Toolbars will no longer hide by default when interacting with a layer. To restore the previous behavior, set `hideToolbarOnInteraction` to true in the `layerInteraction` settings.
-- **FEAT**(Design): Introduced a new design theme called "Grounded".
-
-## 5.3.0
-- **FEAT**(Custom-Widgets): add custom widgets to replace layer interaction buttons (edit, remove, rotateScale)
-
-## 5.2.3
-- **FIX**(Import): Ensure imported numbers are type-safe even if int and double are incorrect. This resolves issue [#221](https://github.com/hm21/pro_image_editor/issues/221)
-
-## 5.2.2
-- **FIX**(Frosted-Glass): Resolve issue that loading-dialog didn't use the text from the i18n class.
-
-## 5.2.1
-- **REFACTOR**(vars): remove deprecated variables
-
-## 5.2.0
-- **BREAKING** **FEAT**(Callback): Added the `ImageInfos` parameter to the `onDone` callback in the crop-rotate-editor.
-- **FEAT**(Config): Add `copyWith` method to all config classes.
-- **DOCS**(Example): Add an example how to start with the crop-rotate-editor and move than to the main-editor.
-- **CHORE**(Dependency): Update `emoji_picker_flutter` dependency to version `3.0.0`.
-- **CHORE**(Dependency): Update `vibration` dependency to version `2.0.0`.
-- **CHORE**(Dependency): Update `mime` dependency to version `1.0.6`.
-
-## 5.1.4
-- **FIX**(Crop-Editor): Ensure the editor respect the maximum output size.
-
-
-## 5.1.3
-- **FIX**(Crop-Editor): Occasionally, image generation may fail due to issues related to internal Flutter widget builds. In such cases, we immediately retry the generation to ensure the final image is produced. 
-Note that this issue primarily occurs in debug mode and it was very rare in release mode.
-
-
-## 5.1.2
-- **FIX**(Crop-Editor): Ensure custom aspect ratio is applied when no changes are made.
-
-
-## 5.1.1
-- **FIX**(Frosted-Glass-Design): Ensure configuration options such as `canReset` function correctly.
-- **DOCS**(Contributors): Include contributor avatars in the README file.
-
-
-## 5.1.0
-- **FEAT**(Layer Management): Added method `replaceLayer` to enable replacing an existing layer at a specified index, enhancing layer management and history tracking capabilities.
-- **FEAT**(Sticker Interaction): Added callback `onTapEditSticker` to display an edit button on stickers when tapped, allowing for customizable sticker editing interactions. This was requested in [#188](https://github.com/hm21/pro_image_editor/issues/188).
-
-
-## 5.0.3
-- **REFACTOR**(config): Rename 'editorIsZoomable' to 'enableZoom'
-- **FIX**(config): Correct typo `initinalTransformConfigs` to 'initialTransformConfigs'
-- **STYLE**(spelling): Correct spelling errors in code comments and documentation
-
-
-## 5.0.2
-
-- **STYLE**(lint): Add extensive lint tests across multiple components to enhance code quality
-
-
-## 5.0.1
-
-- **FIX**(loading-dialog): The loading dialog will now close correctly regardless of the animation builder's state, preventing potential UI freezes or blocks.
-
-
-## 5.0.0
-
-> **Breaking Changes** 
-The package now supports Flutter `3.24`, which changes the `onPopInvoked` method.
-Introduced a new loading dialog as a singleton class.
-
-- **FEAT**(loading-dialog): Replaced the existing loading dialog with a new solution which use `Overlay` instead of `Navigator.push`. This provides more control over the dialog's hide process and prevents it from affecting other widgets.
-- **REFACTOR**(editor): Renamed `transformConfigs` to `initTransformConfigs`.
-- **FIX**(flutter-version): Updated deprecated code for Flutter 3.24 compatibility.
-- **CHORE**: Removed the `awaitLoadingDialogContext` configuration as it is no longer required.
 
 ## 4.3.6
 
@@ -167,7 +43,7 @@ Introduced a new loading dialog as a singleton class.
 
 ## 4.2.8
 
-- **FIX**(dialog-mode): Resolve issue where the subEditorPage had the wrong size in the dialog. This resolves the issue [#164](https://github.com/hm21/pro_image_editor/issues/164).
+- **FIX**(dialog-mode): Resolve issue where the subEditorPage had thre wrong size in the dialog. This resolves the issue [#164](https://github.com/hm21/pro_image_editor/issues/164).
 
 
 ## 4.2.7
@@ -213,17 +89,17 @@ Introduced a new loading dialog as a singleton class.
 
 ## 4.1.1
 
-- **FIX**(vibration):  The `Vibration.hasVibrator` check will now only happen if the user has enabled hitVibration in the helper-line configs. This resolves issue [#139](https://github.com/hm21/pro_image_editor/issue/139).
+- **FIX**(vibration):  The `Vibration.hasVibrator` check will now only happen if the user has enabled hitVibration in the helperline configs. This resolves issue [#139](https://github.com/hm21/pro_image_editor/issue/139).
 
 
 ## 4.1.0
 
-- **FEAT**(zoom): Paint-Editor and Main-Editor has now option for zooming. An example of how to enable this can be found [here](https://github.com/hm21/pro_image_editor/blob/stable/example/lib/pages/zoom_move_editor_example.dart)
+- **FEAT**(zoom): Paint-Editor and Main-Editor are now zoomable. An example of how to enable this can be found [here](https://github.com/hm21/pro_image_editor/blob/stable/example/lib/pages/zoom_move_editor_example.dart)
 
 
 ## 4.0.10
 
-- **FEAT**(text-editor): Add autocorrect and enableSuggestions configs. This was requested in [#132](https://github.com/hm21/pro_image_editor/issues/132)
+- **FEAT**(text-editor): Add autocorrect and enableSuggestions configs. This was requsted in [#132](https://github.com/hm21/pro_image_editor/issues/132)
 - **FIX**(text-editor): Remove duplicate text-shadow from invisible text-field. This resolves issue [#131](https://github.com/hm21/pro_image_editor/issue/131).
 
 
@@ -242,17 +118,17 @@ Introduced a new loading dialog as a singleton class.
 ## 4.0.7
 
 - **FIX**(sticker-export): Resolve incorrect export from sticker images causing lower resolution.
-- **FEAT**(custom-widget): Add custom widgets for font-size bottom sheet. This was requested in [#123](https://github.com/hm21/pro_image_editor/issues/123)
+- **FEAT**(custom-widget): Add custom widgets for font-size bottom sheet. This was requsted in [#123](https://github.com/hm21/pro_image_editor/issues/123)
 
 
 ## 4.0.6
 
-- **FEAT**(layer-scale): Add ability to set minimum and maximum scale factor for layers. This was requested in [#122](https://github.com/hm21/pro_image_editor/issues/122)
+- **FEAT**(layer-scale): Add ability to set minimum and maximum scale factor for layers. This was requsted in [#122](https://github.com/hm21/pro_image_editor/issues/122)
 
 
 ## 4.0.5
 
-- **FIX**(text-editor): Resolve misapplication of secondary color. This resolves issue [#105](https://github.com/hm21/pro_image_editor/discussions/105).
+- **FIX**(text-editor): Resolve misapplication of secondary color. This resolve issue [#105](https://github.com/hm21/pro_image_editor/discussions/105).
 - **FIX**(text-editor): Resolve issue where text styles (bold/italic/underline) are not saved in history. This resolves issue [#118](https://github.com/hm21/pro_image_editor/discussions/118).
 
 
@@ -275,7 +151,7 @@ Introduced a new loading dialog as a singleton class.
 
 ## 4.0.1
 
-- **FIX**(import-history): Resolve incorrect multiple importing from state history. This resolves issue [#106](https://github.com/hm21/pro_image_editor/discussions/106).
+- **FIX**(import-history): Resolve incorrect multiple importing from state history. This resolve issue [#106](https://github.com/hm21/pro_image_editor/discussions/106).
 
 
 ## 4.0.0
@@ -301,17 +177,17 @@ Introduced a new loading dialog as a singleton class.
 ## 3.0.14
 
 - **FEAT**(custom-widget): Add custom widgets to the line-width bottomsheet in the Paint Editor, which was requested in [#103](https://github.com/hm21/pro_image_editor/discussions/103).
-- **FIX**(sticker-export-import) Fix the issue that the sticker size change after export/import them. This resolves issue [#83](https://github.com/hm21/pro_image_editor/discussions/83).
+- **FIX**(sticker-export-import) Fix the issue that the sticker size change after export/import them. This resolve issue [#83](https://github.com/hm21/pro_image_editor/discussions/83).
 
 
 ## 3.0.13
 
-- **FIX**(state-history): Resolve incorrect import/export from transform-configs. This resolves issue [#102](https://github.com/hm21/pro_image_editor/discussions/102).
+- **FIX**(state-history): Resolve incorrect import/export from transform-configs. This resolve issue [#102](https://github.com/hm21/pro_image_editor/discussions/102).
 
 
 ## 3.0.12
 
-- **FIX**(import-history): Resolve incorrect import of fontfamily and font-scale. This issue was discussed in [#83](https://github.com/hm21/pro_image_editor/discussions/83).
+- **FIX**(import-history): Resolve incorrect import of fontfamily and fontscale. This issue was discussed in [#83](https://github.com/hm21/pro_image_editor/discussions/83).
 
 
 ## 3.0.11
@@ -342,7 +218,7 @@ Introduced a new loading dialog as a singleton class.
 - **FEAT**: The editor will now capture by default only the area from the background image and cut all layers outside. To disable this behavior, you can set the flag `captureOnlyBackgroundImageArea` to `false` in the configurations, like below:
 ```dart
 configs: ProImageEditorConfigs(
-  imageGenerationConfigs: const imageGenerationConfigs(
+  imageGenerationConfigs: const ImageGeneratioConfigs(
     captureOnlyBackgroundImageArea: false,
   ),
 ),
@@ -378,7 +254,7 @@ configs: ProImageEditorConfigs(
 
 ## 3.0.2
 
-- **CHORE**(example): also release example in pub.dev for pub-points
+- **CHORE**(example): also release example in pub.dev for pubpoints
 
 
 ## 3.0.1
@@ -392,7 +268,7 @@ configs: ProImageEditorConfigs(
 
 
 - **BREAKING** **FEAT**: Move `onImageEditingComplete`, `onCloseEditor` and `onUpdateUI` callbacks inside `callbacks: ProImageEditorCallbacks()`.
-- **BREAKING** **FEAT**: Change the `allowCompleteWithEmptyEditing` config to `allowEmptyEditCompletion`. Use it new like this `configs: ProImageEditorConfigs(imageGenerationConfigs: imageGenerationConfigs(allowEmptyEditCompletion: false))`. The default value is now also `true` and not `false` anymore.
+- **BREAKING** **FEAT**: Change the `allowCompleteWithEmptyEditing` config to `allowEmptyEditCompletion`. Use it new like this `configs: ProImageEditorConfigs(imageGenerationConfigs: ImageGeneratioConfigs(allowEmptyEditCompletion: false))`. The default value is now also `true` and not `false` anymore.
 - **BREAKING** **FEAT**: Change the layer initial offset position to the center of the screen, not the top left.
 - **BREAKING** **FEAT**: Rename `ColorFilterGenerator` to `FilterModel`.
 - **BREAKING** **FEAT**: Changed the logic of overlaying multiple layers, which may produce different results than before.

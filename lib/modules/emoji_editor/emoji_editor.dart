@@ -1,25 +1,35 @@
 // Dart imports:
 import 'dart:math';
 
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+// Flutter imports:
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+
+// Project imports:
 import 'package:pro_image_editor/modules/emoji_editor/widgets/emoji_editor_category_view.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
-
 import '/mixins/converted_configs.dart';
 import '/mixins/editor_configs_mixin.dart';
 import 'widgets/emoji_editor_full_screen_search.dart';
 import 'widgets/emoji_editor_header_search.dart';
 import 'widgets/emoji_picker_view.dart';
 
-/// The `EmojiEditor` class is responsible for creating a widget that allows
-/// users to select emojis.
+/// The `EmojiEditor` class is responsible for creating a widget that allows users to select emojis.
 ///
-/// This widget provides an EmojiPicker that allows users to choose emojis,
-/// which are then returned
+/// This widget provides an EmojiPicker that allows users to choose emojis, which are then returned
 /// as `EmojiLayerData` containing the selected emoji text.
 class EmojiEditor extends StatefulWidget with SimpleConfigsAccess {
+  @override
+  final ProImageEditorConfigs configs;
+
+  @override
+  final ProImageEditorCallbacks callbacks;
+
+  final ScrollController? scrollController;
+
   /// Creates an `EmojiEditor` widget.
   const EmojiEditor({
     super.key,
@@ -27,14 +37,6 @@ class EmojiEditor extends StatefulWidget with SimpleConfigsAccess {
     this.configs = const ProImageEditorConfigs(),
     this.callbacks = const ProImageEditorCallbacks(),
   });
-  @override
-  final ProImageEditorConfigs configs;
-
-  @override
-  final ProImageEditorCallbacks callbacks;
-
-  /// Controller for the scrollable content
-  final ScrollController? scrollController;
 
   @override
   createState() => EmojiEditorState();
@@ -49,8 +51,6 @@ class EmojiEditorState extends State<EmojiEditor>
   late final EmojiTextEditingController _controller;
 
   late final TextStyle _textStyle;
-
-  /// Check device is from Apple
   final bool isApple = [TargetPlatform.iOS, TargetPlatform.macOS]
       .contains(defaultTargetPlatform);
   bool _showExternalSearchPage = false;
@@ -112,7 +112,8 @@ class EmojiEditorState extends State<EmojiEditor>
             emojiSizeMax: 32,
             replaceEmojiOnLimitExceed: false,
           ),
-      viewOrderConfig: imageEditorTheme.emojiEditor.viewOrderConfig,
+      swapCategoryAndBottomBar:
+          imageEditorTheme.emojiEditor.swapCategoryAndBottomBar,
       skinToneConfig: imageEditorTheme.emojiEditor.skinToneConfig,
       categoryViewConfig: imageEditorTheme.emojiEditor.categoryViewConfig ??
           CategoryViewConfig(
@@ -175,11 +176,7 @@ class EmojiEditorState extends State<EmojiEditor>
 
   @override
   Widget build(BuildContext context) {
-    return ExtendedPopScope(
-      child: SafeArea(
-        child: _buildEmojiPicker(),
-      ),
-    );
+    return SafeArea(child: _buildEmojiPicker());
   }
 
   /// Builds a SizedBox containing the EmojiPicker with dynamic sizing.
@@ -197,7 +194,6 @@ class EmojiEditorState extends State<EmojiEditor>
                 EmojiLayerData(emoji: emoji.emoji),
               );
             },
-            () {},
             () {},
             () {},
           ),

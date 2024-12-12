@@ -7,32 +7,13 @@ import 'package:pro_image_editor/designs/whatsapp/whatsapp_color_picker.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:pro_image_editor/utils/pro_image_editor_icons.dart';
 
-/// A stateful widget that represents a bottom bar with a frosted glass effect.
-///
-/// This bottom bar is designed for use in a painting editor interface,
-/// providing controls and options for painting operations in a stylish manner.
+/// Represents the bottom bar for the paint functionality in the Frosted-Glass theme.
 class FrostedGlassPaintBottomBar extends StatefulWidget {
-  /// Creates a [FrostedGlassPaintBottomBar].
-  ///
-  /// This bottom bar utilizes a frosted glass effect to enhance the visual
-  /// design of a painting editor, offering controls relevant to painting.
-  ///
-  /// Example:
-  /// ```
-  /// FrostedGlassPaintBottomBar(
-  ///   paintEditor: myPaintEditorState,
-  /// )
-  /// ```
+  final PaintingEditorState paintEditor;
   const FrostedGlassPaintBottomBar({
     super.key,
     required this.paintEditor,
   });
-
-  /// The state of the painting editor associated with this bottom bar.
-  ///
-  /// This state allows the bottom bar to interact with the painting editor,
-  /// providing necessary controls and options to manage painting activities.
-  final PaintingEditorState paintEditor;
 
   @override
   State<FrostedGlassPaintBottomBar> createState() =>

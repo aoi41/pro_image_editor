@@ -9,16 +9,13 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 // Project imports:
 import '../../utils/example_helper.dart';
 
-/// The custom design example
 class HighlyConfigurableExample extends StatefulWidget {
-  /// Creates a new [HighlyConfigurableExample] widget.
+  final String url;
+
   const HighlyConfigurableExample({
     super.key,
     required this.url,
   });
-
-  /// The URL of the image to display.
-  final String url;
 
   @override
   State<HighlyConfigurableExample> createState() =>
@@ -43,8 +40,7 @@ class _HighlyConfigurableExampleState extends State<HighlyConfigurableExample>
             loadingDialogMsg: 'Please wait...',
             closeEditorWarningTitle: 'Close Image Editor?',
             closeEditorWarningMessage:
-                'Are you sure you want to close the Image Editor? Your changes '
-                'will not be saved.',
+                'Are you sure you want to close the Image Editor? Your changes will not be saved.',
             closeEditorWarningConfirmBtn: 'OK',
             closeEditorWarningCancelBtn: 'Cancel',
           ),
@@ -131,22 +127,6 @@ class _HighlyConfigurableExampleState extends State<HighlyConfigurableExample>
               xProII: 'Pro II',
             ),
           ),
-          tuneEditor: I18nTuneEditor(
-            bottomNavigationBarText: 'Tune',
-            back: 'Back',
-            done: 'Done',
-            brightness: 'Brightness',
-            contrast: 'Contrast',
-            saturation: 'Saturation',
-            exposure: 'Exposure',
-            hue: 'Hue',
-            temperature: 'Temperature',
-            sharpness: 'Sharpness',
-            fade: 'Fade',
-            luminance: 'Luminance',
-            undo: 'Undo',
-            redo: 'Redo',
-          ),
           blurEditor: I18nBlurEditor(
             bottomNavigationBarText: 'Blur',
             back: 'Back',
@@ -213,14 +193,6 @@ class _HighlyConfigurableExampleState extends State<HighlyConfigurableExample>
             appBarForegroundColor: Color(0xFFE1E1E1),
             previewTextColor: Color.fromARGB(255, 255, 0, 0),
             background: Color.fromARGB(255, 83, 78, 0),
-          ),
-          tuneEditor: TuneEditorTheme(
-            appBarBackgroundColor: Color.fromARGB(255, 160, 34, 160),
-            appBarForegroundColor: Color(0xFFE1E1E1),
-            background: Color.fromARGB(255, 0, 83, 32),
-            bottomBarColor: Color.fromARGB(255, 0, 136, 136),
-            bottomBarActiveItemColor: Color.fromARGB(255, 173, 231, 25),
-            bottomBarInactiveItemColor: Color.fromARGB(255, 255, 210, 216),
           ),
           blurEditor: BlurEditorTheme(
             appBarBackgroundColor: Color.fromARGB(255, 56, 0, 0),
@@ -290,9 +262,6 @@ class _HighlyConfigurableExampleState extends State<HighlyConfigurableExample>
             reset: Icons.reset_tv,
           ),
           filterEditor: IconsFilterEditor(
-            bottomNavBar: Icons.tungsten,
-          ),
-          tuneEditor: IconsTuneEditor(
             bottomNavBar: Icons.filter_b_and_w_outlined,
           ),
           blurEditor: IconsBlurEditor(
@@ -366,101 +335,6 @@ class _HighlyConfigurableExampleState extends State<HighlyConfigurableExample>
           enabled: true,
           filterList: presetFiltersList,
         ),
-        tuneEditorConfigs: TuneEditorConfigs(
-            enabled: true,
-            showLayers: true,
-            tuneAdjustmentOptions: [
-              const TuneAdjustmentItem(
-                id: 'brightness',
-                icon: Icons.brightness_4_outlined,
-                label: 'Brightness',
-                min: -0.5,
-                max: 0.5,
-                divisions: 200,
-                labelMultiplier: 200,
-                toMatrix: ColorFilterAddons.brightness,
-              ),
-              const TuneAdjustmentItem(
-                id: 'contrast',
-                icon: Icons.contrast,
-                label: 'Contrast',
-                min: -0.5,
-                max: 0.5,
-                divisions: 200,
-                labelMultiplier: 200,
-                toMatrix: ColorFilterAddons.contrast,
-              ),
-              const TuneAdjustmentItem(
-                id: 'saturation',
-                icon: Icons.water_drop_outlined,
-                label: 'Saturation',
-                min: -0.5,
-                max: .5,
-                divisions: 200,
-                labelMultiplier: 200,
-                toMatrix: ColorFilterAddons.saturation,
-              ),
-              const TuneAdjustmentItem(
-                id: 'exposure',
-                icon: Icons.exposure,
-                label: 'Exposure',
-                min: -1,
-                max: 1,
-                divisions: 200,
-                toMatrix: ColorFilterAddons.exposure,
-              ),
-              const TuneAdjustmentItem(
-                id: 'hue',
-                icon: Icons.color_lens_outlined,
-                label: 'Hue',
-                min: -0.25,
-                max: .25,
-                divisions: 400,
-                labelMultiplier: 400,
-                toMatrix: ColorFilterAddons.hue,
-              ),
-              TuneAdjustmentItem(
-                id: 'temperature',
-                icon: Icons.thermostat_outlined,
-                label: 'Temperature',
-                min: -0.5,
-                max: .5,
-                divisions: 200,
-                labelMultiplier: 200,
-                toMatrix: (value) {
-                  double r = value > 0 ? 1 : 1 + value;
-                  double b = value < 0 ? 1 : 1 - value;
-                  return ColorFilterAddons.rgbScale(r, 1, b);
-                },
-              ),
-              const TuneAdjustmentItem(
-                id: 'sharpness',
-                icon: Icons.shutter_speed,
-                label: 'Sharpness',
-                min: 0,
-                max: 1,
-                divisions: 100,
-                toMatrix: ColorFilterAddons.sharpness,
-              ),
-              const TuneAdjustmentItem(
-                id: 'luminance',
-                icon: Icons.light_mode_outlined,
-                label: 'Luminance',
-                min: -1,
-                max: 1,
-                divisions: 200,
-                toMatrix: ColorFilterAddons.luminance,
-              ),
-              const TuneAdjustmentItem(
-                id: 'fade',
-                icon: Icons.blur_off_outlined,
-                label: 'Fade',
-                min: -1,
-                max: 1,
-                divisions: 200,
-                toMatrix: ColorFilterAddons.fade,
-              ),
-            ]),
         blurEditorConfigs: const BlurEditorConfigs(
           enabled: true,
           maxBlur: 20.0,

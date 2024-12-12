@@ -1,10 +1,8 @@
 // Flutter imports:
 import 'package:flutter/widgets.dart';
 
-/// The `HelperLineTheme` class defines the theme for helper lines in the image
-/// editor.
-/// Helper lines are used to assist with alignment and positioning of elements
-/// in the editor.
+/// The `HelperLineTheme` class defines the theme for helper lines in the image editor.
+/// Helper lines are used to assist with alignment and positioning of elements in the editor.
 ///
 /// Usage:
 ///
@@ -38,14 +36,6 @@ import 'package:flutter/widgets.dart';
 /// // Access other theme properties...
 /// ```
 class HelperLineTheme {
-  /// Creates an instance of the `HelperLineTheme` class with the specified
-  /// theme properties.
-  const HelperLineTheme({
-    this.horizontalColor = const Color(0xFF1565C0),
-    this.verticalColor = const Color(0xFF1565C0),
-    this.rotateColor = const Color(0xFFE91E63),
-  });
-
   /// Color of horizontal helper lines.
   final Color horizontalColor;
 
@@ -55,21 +45,10 @@ class HelperLineTheme {
   /// Color of rotation helper lines.
   final Color rotateColor;
 
-  /// Creates a copy of this `HelperLineTheme` object with the given fields
-  /// replaced with new values.
-  ///
-  /// The [copyWith] method allows you to create a new instance of
-  /// [HelperLineTheme] with some properties updated while keeping the
-  /// others unchanged.
-  HelperLineTheme copyWith({
-    Color? horizontalColor,
-    Color? verticalColor,
-    Color? rotateColor,
-  }) {
-    return HelperLineTheme(
-      horizontalColor: horizontalColor ?? this.horizontalColor,
-      verticalColor: verticalColor ?? this.verticalColor,
-      rotateColor: rotateColor ?? this.rotateColor,
-    );
-  }
+  /// Creates an instance of the `HelperLineTheme` class with the specified theme properties.
+  const HelperLineTheme({
+    this.horizontalColor = const Color(0xFF1565C0),
+    this.verticalColor = const Color(0xFF1565C0),
+    this.rotateColor = const Color(0xFFE91E63),
+  });
 }

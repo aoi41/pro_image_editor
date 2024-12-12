@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs
-
 import 'package:flutter/material.dart';
 
 import '../rounded_background_text.dart';
@@ -186,7 +184,7 @@ class RoundedBackgroundText extends StatelessWidget {
   /// {@template rounded_background_text.background_color}
   /// The text background color.
   ///
-  /// If null, a transparent color will be used.
+  /// If null, a trasparent color will be used.
   /// {@endtemplate}
   final Color? backgroundColor;
 
@@ -196,8 +194,7 @@ class RoundedBackgroundText extends StatelessWidget {
   /// {@macro flutter.painting.textPainter.textWidthBasis}
   final TextWidthBasis? textWidthBasis;
 
-  /// An optional maximum number of lines for the text to span, wrapping if
-  /// necessary.
+  /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated.
   ///
   /// If this is 1, text will not wrap. Otherwise, text will be wrapped at the
@@ -214,8 +211,7 @@ class RoundedBackgroundText extends StatelessWidget {
   /// be rendered differently, depending on the locale.
   ///
   /// It's rarely necessary to set this property. By default its value
-  /// is inherited from the enclosing app with
-  /// `Localizations.localeOf(context)`.
+  /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
   final Locale? locale;
@@ -299,17 +295,18 @@ class RoundedBackgroundText extends StatelessWidget {
 }
 
 class RoundedBackgroundTextPainter extends CustomPainter {
+  final Color backgroundColor;
+  final TextPainter text;
+
+  final double innerRadius;
+  final double outerRadius;
+
   const RoundedBackgroundTextPainter({
     required this.backgroundColor,
     required this.text,
     required this.innerRadius,
     required this.outerRadius,
   });
-  final Color backgroundColor;
-  final TextPainter text;
-
-  final double innerRadius;
-  final double outerRadius;
 
   @visibleForTesting
 
@@ -373,8 +370,8 @@ class RoundedBackgroundTextPainter extends CustomPainter {
       return;
     }
 
-    // This ensures the normalization will be done for all lines in the
-    // paragraph and not only for the next one
+    // This ensures the normalization will be done for all lines in the paragraph
+    // and not only for the next one
     for (final info in lineInfo) {
       normalize(lineInfo.elementAtOrNull(lineInfo.indexOf(info) + 1), info);
     }
@@ -400,10 +397,9 @@ class RoundedBackgroundTextPainter extends CustomPainter {
         final controlPoint = Offset(info.x, info.y);
         final endPoint = Offset(info.x, info.y + localOuterRadius);
 
-        path
-          ..lineTo(info.x + localOuterRadius, info.y)
-          ..quadraticBezierTo(
-              controlPoint.dx, controlPoint.dy, endPoint.dx, endPoint.dy);
+        path.lineTo(info.x + localOuterRadius, info.y);
+        path.quadraticBezierTo(
+            controlPoint.dx, controlPoint.dy, endPoint.dx, endPoint.dy);
       }
 
       void drawBottomLeftCorner(LineMetricsHelper info) {
@@ -442,8 +438,8 @@ class RoundedBackgroundTextPainter extends CustomPainter {
       }
 
       if (next != null) {
-        // If it's the first line OR the previous line is bigger than the
-        // current one, draw the top left corner
+        // If it's the first line OR the previous line is bigger than the current
+        // one, draw the top left corner
         if (info == firstInfo || previous.x > info.x) {
           drawTopLeftCorner(info);
         }
@@ -490,10 +486,9 @@ class RoundedBackgroundTextPainter extends CustomPainter {
         final controlPoint = Offset(info.fullWidth, info.y);
         final endPoint = Offset(info.fullWidth - factor, info.y);
 
-        path
-          ..lineTo(info.fullWidth, info.y + factor)
-          ..quadraticBezierTo(
-              controlPoint.dx, controlPoint.dy, endPoint.dx, endPoint.dy);
+        path.lineTo(info.fullWidth, info.y + factor);
+        path.quadraticBezierTo(
+            controlPoint.dx, controlPoint.dy, endPoint.dx, endPoint.dy);
       }
 
       void drawBottomRightCorner(LineMetricsHelper info) {
@@ -591,17 +586,16 @@ class RoundedBackgroundTextPainter extends CustomPainter {
         return width.roundToDouble();
       }();
 
-      // If the difference is negative, it means that the next element is a
-      // little bigger than the current one. The current one takes the
-      //dimensions of the next one
+      // If the difference is negative, it means that the next element is a little
+      // bigger than the current one. The current one takes the dimensions of
+      // the next one
       if (difference.isNegative) {
         difference = -difference;
       }
       final differenceBigger = difference > outerRadius;
       if (!differenceBigger) {
-        info
-          .._overridenX = next.x
-          .._overridenWidth = next.fullWidth;
+        info._overridenX = next.x;
+        info._overridenWidth = next.fullWidth;
       }
       // If the difference is positive, it means that the current element is a
       // little bigger than the next one. The next one takes the dimensions of
@@ -609,9 +603,8 @@ class RoundedBackgroundTextPainter extends CustomPainter {
       else {
         final differenceBigger = difference > outerRadius;
         if (!differenceBigger) {
-          next
-            .._overridenX = info.x
-            .._overridenWidth = info.fullWidth;
+          next._overridenX = info.x;
+          next._overridenWidth = info.fullWidth;
         }
       }
     }
@@ -621,9 +614,6 @@ class RoundedBackgroundTextPainter extends CustomPainter {
 /// A helper class that holds important information about a single line metrics.
 /// This is used to calculate the position of the line in the paragraph.
 class LineMetricsHelper {
-  /// Creates a new line metrics helper
-  LineMetricsHelper(this.metrics, this.length);
-
   /// The original line metrics, which stores the measurements and statistics of
   /// a single line in the paragraph.
   final LineMetrics metrics;
@@ -635,7 +625,7 @@ class LineMetricsHelper {
   ///  * [isLast], which uses this property to check the amount of lines
   final int length;
 
-  /// The override width of the line
+  /// The overriden width of the line
   ///
   /// This allows another line to affect the width of this line based on the
   /// difference between the two. If the difference is minimal, the width may
@@ -648,6 +638,9 @@ class LineMetricsHelper {
   /// difference between the two. If the difference is minimal, the x may
   /// be the same
   double? _overridenX;
+
+  /// Creates a new line metrics helper
+  LineMetricsHelper(this.metrics, this.length);
 
   /// Whether this line has no content
   bool get isEmpty => rawWidth == 0.0;

@@ -17,11 +17,10 @@ import '/utils/debounce.dart';
 
 /// A helper class responsible for managing layer interactions in the editor.
 ///
-/// The `LayerInteractionManager` class provides methods for handling various
-/// interactions with layers in an image editing environment, including
-/// scaling, rotating, flipping, and zooming. It also manages the display of
-/// helper lines and provides haptic feedback when interacting with these lines
-/// to enhance the user experience.
+/// The `LayerInteractionManager` class provides methods for handling various interactions
+/// with layers in an image editing environment, including scaling, rotating, flipping,
+/// and zooming. It also manages the display of helper lines and provides haptic feedback
+/// when interacting with these lines to enhance the user experience.
 class LayerInteractionManager {
   /// Debounce for scaling actions in the editor.
   late Debounce scaleDebounce;
@@ -96,7 +95,6 @@ class LayerInteractionManager {
   /// When `true`, enables optimized hero-animation for improved performance.
   bool freeStyleHighPerformanceHero = false;
 
-  /// Determines if any high-performance mode is enabled for free style editing.
   bool get freeStyleHighPerformance =>
       freeStyleHighPerformanceEditorZoom ||
       freeStyleHighPerformanceScaling ||
@@ -115,8 +113,7 @@ class LayerInteractionManager {
   /// Helper variable for scaling during rotation of a layer.
   double? rotateScaleLayerScaleHelper;
 
-  /// Helper variable for storing the size of a layer during rotation and
-  /// scaling operations.
+  /// Helper variable for storing the size of a layer during rotation and scaling operations.
   Size? rotateScaleLayerSizeHelper;
 
   /// Last recorded X-axis position for layers.
@@ -125,8 +122,7 @@ class LayerInteractionManager {
   /// Last recorded Y-axis position for layers.
   LayerLastPosition lastPositionY = LayerLastPosition.center;
 
-  /// Determines if layers are selectable based on the configuration and device
-  /// type.
+  /// Determines if layers are selectable based on the configuration and device type.
   bool layersAreSelectable(ProImageEditorConfigs configs) {
     if (configs.layerInteraction.selectable ==
         LayerInteractionSelectable.auto) {
@@ -144,7 +140,6 @@ class LayerInteractionManager {
     required ScaleUpdateDetails details,
     required Layer activeLayer,
     required Size editorSize,
-    required double appBarHeight,
     required bool configEnabledHitVibration,
     required ThemeLayerInteraction layerTheme,
   }) {
@@ -162,7 +157,7 @@ class LayerInteractionManager {
 
     Offset touchPositionFromCenter = Offset(
           realDx - editorSize.width / 2,
-          realDy - editorSize.height / 2 - appBarHeight,
+          realDy - editorSize.height / 2,
         ) -
         layerOffset;
 
@@ -193,8 +188,7 @@ class LayerInteractionManager {
     );
   }
 
-  /// Calculates movement of a layer based on user interactions, considering
-  /// various conditions such as hit areas and screen boundaries.
+  /// Calculates movement of a layer based on user interactions, considering various conditions such as hit areas and screen boundaries.
   calculateMovement({
     required double editorScaleFactor,
     required BuildContext context,
@@ -229,7 +223,7 @@ class LayerInteractionManager {
 
     if (editorScaleFactor > 1) return;
 
-    bool shouldVibrate = false;
+    bool vibarate = false;
     double posX = activeLayer.offset.dx;
     double posY = activeLayer.offset.dy;
 
@@ -252,7 +246,7 @@ class LayerInteractionManager {
             (helperGoNearLineLeft || helperGoNearLineRight)) ||
         (showVerticalHelperLine && hitAreaX)) {
       if (!showVerticalHelperLine) {
-        shouldVibrate = true;
+        vibarate = true;
         snapStartPosX = detail.focalPoint.dx;
       }
       showVerticalHelperLine = true;
@@ -269,7 +263,7 @@ class LayerInteractionManager {
             (helperGoNearLineTop || helperGoNearLineBottom)) ||
         (showHorizontalHelperLine && hitAreaY)) {
       if (!showHorizontalHelperLine) {
-        shouldVibrate = true;
+        vibarate = true;
         snapStartPosY = detail.focalPoint.dy;
       }
       showHorizontalHelperLine = true;
@@ -281,7 +275,7 @@ class LayerInteractionManager {
           posY <= 0 ? LayerLastPosition.top : LayerLastPosition.bottom;
     }
 
-    if (configEnabledHitVibration && shouldVibrate) {
+    if (configEnabledHitVibration && vibarate) {
       _lineHitVibrate();
     }
   }
@@ -313,8 +307,7 @@ class LayerInteractionManager {
     scaleDebounce(() => _activeScale = false);
   }
 
-  /// Checks the rotation line based on user interactions, adjusting rotation
-  /// accordingly.
+  /// Checks the rotation line based on user interactions, adjusting rotation accordingly.
   checkRotationLine({
     required Layer activeLayer,
     required Size editorSize,
@@ -358,8 +351,7 @@ class LayerInteractionManager {
     }
   }
 
-  /// Handles cleanup and resets various flags and states after scaling
-  /// interaction ends.
+  /// Handles cleanup and resets various flags and states after scaling interaction ends.
   onScaleEnd() {
     enabledHitDetection = true;
     freeStyleHighPerformanceScaling = false;
@@ -373,8 +365,7 @@ class LayerInteractionManager {
 
   /// Rotate a layer.
   ///
-  /// This method rotates a layer based on various factors, including flip and
-  /// angle.
+  /// This method rotates a layer based on various factors, including flip and angle.
   void rotateLayer({
     required Layer layer,
     required bool beforeIsFlipX,
@@ -391,33 +382,29 @@ class LayerInteractionManager {
     }
 
     if (rotationAngle == 90) {
-      layer
-        ..scale /= rotationScale
-        ..offset = Offset(
-          newImgW - layer.offset.dy / rotationScale,
-          layer.offset.dx / rotationScale,
-        );
+      layer.scale /= rotationScale;
+      layer.offset = Offset(
+        newImgW - layer.offset.dy / rotationScale,
+        layer.offset.dx / rotationScale,
+      );
     } else if (rotationAngle == 180) {
       layer.offset = Offset(
         newImgW - layer.offset.dx,
         newImgH - layer.offset.dy,
       );
     } else if (rotationAngle == 270) {
-      layer
-        ..scale /= rotationScale
-        ..offset = Offset(
-          layer.offset.dy / rotationScale,
-          newImgH - layer.offset.dx / rotationScale,
-        );
+      layer.scale /= rotationScale;
+      layer.offset = Offset(
+        layer.offset.dy / rotationScale,
+        newImgH - layer.offset.dx / rotationScale,
+      );
     }
   }
 
   /// Handles zooming of a layer.
   ///
-  /// This method calculates the zooming of a layer based on the specified
-  /// parameters.
-  /// It checks if the layer should be zoomed and performs the necessary
-  /// transformations.
+  /// This method calculates the zooming of a layer based on the specified parameters.
+  /// It checks if the layer should be zoomed and performs the necessary transformations.
   ///
   /// Returns `true` if the layer was zoomed, otherwise `false`.
   bool zoomedLayer({
@@ -446,12 +433,12 @@ class LayerInteractionManager {
         paddingBottom < -0.1) {
       var initialIconX = (layer.offset.dx - paddingLeft) * scaleX;
       var initialIconY = (layer.offset.dy - paddingTop) * scaleX;
-      layer
-        ..offset = Offset(
-          initialIconX,
-          initialIconY,
-        )
-        ..scale *= scale;
+      layer.offset = Offset(
+        initialIconX,
+        initialIconY,
+      );
+
+      layer.scale *= scale;
       return true;
     }
     return false;
@@ -459,8 +446,7 @@ class LayerInteractionManager {
 
   /// Flip a layer horizontally or vertically.
   ///
-  /// This method flips a layer either horizontally or vertically based on the
-  /// specified parameters.
+  /// This method flips a layer either horizontally or vertically based on the specified parameters.
   void flipLayer({
     required Layer layer,
     required bool flipX,
@@ -481,42 +467,40 @@ class LayerInteractionManager {
       );
     }
     if (flipX) {
-      layer
-        ..flipX = !layer.flipX
-        ..offset = Offset(
-          layer.offset.dx,
-          imageHeight - layer.offset.dy,
-        );
+      layer.flipX = !layer.flipX;
+      layer.offset = Offset(
+        layer.offset.dx,
+        imageHeight - layer.offset.dy,
+      );
     }
   }
 
   /// Vibrates the device briefly if enabled and supported.
   ///
-  /// This function checks if helper lines hit vibration is enabled in the
-  /// widget's configurations (`widget.configs.helperLines.hitVibration`) and
-  /// whether the device supports vibration. If both conditions are met, it
-  /// triggers a brief vibration on the device.
+  /// This function checks if helper lines hit vibration is enabled in the widget's
+  /// configurations (`widget.configs.helperLines.hitVibration`) and whether the
+  /// device supports vibration. If both conditions are met, it triggers a brief
+  /// vibration on the device.
   ///
   /// If the device supports custom vibrations, it uses the `Vibration.vibrate`
   /// method with a duration of 3 milliseconds to produce the vibration.
   ///
-  /// On older Android devices, it initiates vibration using
-  /// `Vibration.vibrate`, and then, after 3 milliseconds, cancels the
-  /// vibration using `Vibration.cancel`.
+  /// On older Android devices, it initiates vibration using `Vibration.vibrate`,
+  /// and then, after 3 milliseconds, cancels the vibration using `Vibration.cancel`.
   ///
-  /// This function is used to provide haptic feedback when helper lines are
-  /// interacted with, enhancing the user experience.
+  /// This function is used to provide haptic feedback when helper lines are interacted
+  /// with, enhancing the user experience.
   void _lineHitVibrate() {
     if (deviceCanVibrate && deviceCanCustomVibrate) {
       Vibration.vibrate(duration: 3);
     } else if (!kIsWeb && Platform.isAndroid) {
-      /// On old android devices we can stop the vibration after 3 milliseconds
-      /// iOS: only works for custom haptic vibrations using CHHapticEngine.
-      /// This will set `deviceCanCustomVibrate` anyway to true so it's
-      /// impossible to fake it.
+      // On old android devices we can stop the vibration after 3 milliseconds
+      // iOS: only works for custom haptic vibrations using CHHapticEngine.
+      // This will set `deviceCanCustomVibrate` anyway to true so it's impossible to fake it.
       Vibration.vibrate();
-      Future.delayed(const Duration(milliseconds: 3))
-          .whenComplete(Vibration.cancel);
+      Future.delayed(const Duration(milliseconds: 3)).whenComplete(() {
+        Vibration.cancel();
+      });
     }
   }
 

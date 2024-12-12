@@ -3,9 +3,11 @@ import 'editor_init_configs.dart';
 
 /// Configuration class for initializing the paint editor.
 ///
-/// This class extends [EditorInitConfigs] and adds specific parameters related
-/// to painting functionality.
+/// This class extends [EditorInitConfigs] and adds specific parameters related to painting functionality.
 class PaintEditorInitConfigs extends EditorInitConfigs {
+  /// Determines whether we draw a "fake" hero widget or not.
+  final bool enableFakeHero;
+
   /// Creates a new instance of [PaintEditorInitConfigs].
   ///
   /// The [theme] parameter specifies the theme data for the editor.
@@ -20,7 +22,6 @@ class PaintEditorInitConfigs extends EditorInitConfigs {
     super.mainImageSize,
     super.mainBodySize,
     super.appliedFilters,
-    super.appliedTuneAdjustments,
     super.appliedBlurFactor,
     super.onCloseEditor,
     super.onImageEditingComplete,
@@ -29,7 +30,4 @@ class PaintEditorInitConfigs extends EditorInitConfigs {
     this.enableFakeHero = false,
     required super.theme,
   });
-
-  /// Determines whether we draw a "fake" hero widget or not.
-  final bool enableFakeHero;
 }

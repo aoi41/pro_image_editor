@@ -8,9 +8,7 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 import '../utils/example_constants.dart';
 import '../utils/example_helper.dart';
 
-/// The example how to use the round cropper
 class RoundCropperExample extends StatefulWidget {
-  /// Creates a new [RoundCropperExample] widget.
   const RoundCropperExample({super.key});
 
   @override
@@ -29,15 +27,15 @@ class _RoundCropperExampleState extends State<RoundCropperExample>
             AssetImage(ExampleConstants.of(context)!.demoAssetPath), context);
         if (!context.mounted) return;
 
-        bool initialized = false;
+        bool inited = false;
 
-        await Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
                 LayoutBuilder(builder: (context, constraints) {
-              if (!initialized) {
-                initialized = true;
+              if (!inited) {
+                inited = true;
                 Future.delayed(const Duration(milliseconds: 1), () {
                   _cropRotateEditorKey.currentState!.enableFakeHero = true;
                   setState(() {});
@@ -66,7 +64,7 @@ class _RoundCropperExampleState extends State<RoundCropperExample>
         onCloseEditor: onCloseEditor,
         configs: ProImageEditorConfigs(
           designMode: platformDesignMode,
-          imageGenerationConfigs: const ImageGenerationConfigs(
+          imageGenerationConfigs: const ImageGeneratioConfigs(
             outputFormat: OutputFormat.png,
             pngFilter: PngFilter.average,
           ),

@@ -8,22 +8,9 @@ import 'package:pro_image_editor/utils/unique_id_generator.dart';
 
 /// An abstract class representing a thread (isolate) used for processing tasks.
 ///
-/// This class provides the structure for managing tasks within an isolate,
-/// including initializing the isolate, sending data to the isolate, and
-/// destroying active tasks.
+/// This class provides the structure for managing tasks within an isolate, including
+/// initializing the isolate, sending data to the isolate, and destroying active tasks.
 abstract class Thread {
-  /// Constructs a [Thread] with the given [onMessage] callback.
-  ///
-  /// The constructor generates a unique ID for the thread, initializes the
-  /// [readyState] completer, and calls the [init] method to set up the thread.
-  Thread({
-    required this.onMessage,
-  }) {
-    id = generateUniqueId();
-    readyState = Completer();
-    init();
-  }
-
   /// A unique id for this thread.
   late String id;
 
@@ -37,10 +24,22 @@ abstract class Thread {
   final Function(ThreadResponse) onMessage;
 
   /// A completer to track when the thread is ready for communication.
-  late Completer<bool> readyState;
+  late Completer readyState;
 
   /// Indicates whether the thread is ready for communication.
   bool isReady = false;
+
+  /// Constructs a [Thread] with the given [onMessage] callback.
+  ///
+  /// The constructor generates a unique ID for the thread, initializes the
+  /// [readyState] completer, and calls the [init] method to set up the thread.
+  Thread({
+    required this.onMessage,
+  }) {
+    id = generateUniqueId();
+    readyState = Completer();
+    init();
+  }
 
   /// Initializes the thread.
   ///
@@ -53,9 +52,8 @@ abstract class Thread {
   /// [data] - The data to be processed by the thread.
   void send(ThreadRequest data);
 
-  /// Destroys all active tasks in the thread, except the task with the given
-  /// [ignoreTaskId].
-  ///W
+  /// Destroys all active tasks in the thread, except the task with the given [ignoreTaskId].
+  ///
   /// [ignoreTaskId] - The ID of the task that should not be destroyed.
   void destroyActiveTasks(String ignoreTaskId);
 

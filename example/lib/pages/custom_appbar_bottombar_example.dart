@@ -8,29 +8,12 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pro_image_editor/models/custom_widgets/custom_widgets_layer_interaction.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 
 // Project imports:
 import '../utils/example_helper.dart';
 
-/// A widget that demonstrates a custom app bar and bottom bar layout.
-///
-/// The [CustomAppbarBottombarExample] widget is a stateful widget that provides
-/// an example of how to implement a custom app bar at the top and a custom
-/// bottom bar at the bottom of the screen. This is useful in applications
-/// where a unique layout or custom controls are needed in both the app bar
-/// and the bottom bar.
-///
-/// The state for this widget is managed by the
-/// [_CustomAppbarBottombarExampleState] class.
-///
-/// Example usage:
-/// ```dart
-/// CustomAppbarBottombarExample();
-/// ```
 class CustomAppbarBottombarExample extends StatefulWidget {
-  /// Creates a new [CustomAppbarBottombarExample] widget.
   const CustomAppbarBottombarExample({super.key});
 
   @override
@@ -38,10 +21,6 @@ class CustomAppbarBottombarExample extends StatefulWidget {
       _CustomAppbarBottombarExampleState();
 }
 
-/// The state for the [CustomAppbarBottombarExample] widget.
-///
-/// This class manages the layout and behavior of the custom app bar and
-/// bottom bar within the [CustomAppbarBottombarExample] widget.
 class _CustomAppbarBottombarExampleState
     extends State<CustomAppbarBottombarExample>
     with ExampleHelperState<CustomAppbarBottombarExample> {
@@ -95,8 +74,6 @@ class _CustomAppbarBottombarExampleState
 
   final String _url = 'https://picsum.photos/id/237/2000';
 
-  final _layerInteractionButtonRadius = 10.0;
-
   @override
   void initState() {
     _bottomBarScrollCtrl = ScrollController();
@@ -117,18 +94,21 @@ class _CustomAppbarBottombarExampleState
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () async {
-        LoadingDialog.instance.show(
+        LoadingDialog loading = LoadingDialog();
+        await loading.show(
           context,
           configs: const ProImageEditorConfigs(),
           theme: ThemeData.dark(),
         );
+        if (!context.mounted) return;
 
         await precacheImage(NetworkImage(_url), context);
 
-        LoadingDialog.instance.hide();
+        if (!context.mounted) return;
+        await loading.hide(context);
 
         if (!context.mounted) return;
-        await Navigator.of(context).push(
+        Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => _buildEditor()),
         );
       },
@@ -152,12 +132,18 @@ class _CustomAppbarBottombarExampleState
           designMode: platformDesignMode,
           customWidgets: ImageEditorCustomWidgets(
             mainEditor: CustomWidgetsMainEditor(
-              appBar: (editor, rebuildStream) => ReactiveCustomAppbar(
-                  stream: rebuildStream, builder: (_) => _buildAppBar(editor)),
-              bottomBar: (editor, rebuildStream, key) => ReactiveCustomWidget(
-                  stream: rebuildStream,
-                  builder: (_) =>
-                      _bottomNavigationBar(editor, key, constraints)),
+              appBar: (editor, rebuildStream) => editor.selectedLayerIndex < 0
+                  ? ReactiveCustomAppbar(
+                      stream: rebuildStream,
+                      builder: (_) => _buildAppBar(editor))
+                  : null,
+              bottomBar: (editor, rebuildStream, key) =>
+                  editor.selectedLayerIndex < 0
+                      ? ReactiveCustomWidget(
+                          stream: rebuildStream,
+                          builder: (_) =>
+                              _bottomNavigationBar(editor, key, constraints))
+                      : null,
             ),
             paintEditor: CustomWidgetsPaintEditor(
               appBar: (paintEditor, rebuildStream) => ReactiveCustomAppbar(
@@ -208,119 +194,6 @@ class _CustomAppbarBottombarExampleState
               appBar: (blurEditor, rebuildStream) => ReactiveCustomAppbar(
                 stream: rebuildStream,
                 builder: (_) => _appBarBlurEditor(blurEditor),
-              ),
-            ),
-            layerInteraction: CustomWidgetsLayerInteraction(
-              editIcon:
-                  (rebuildStream, onTap, toggleTooltipVisibility, rotation) =>
-                      ReactiveCustomWidget(
-                builder: (_) {
-                  return Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Transform.rotate(
-                      angle: rotation,
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: onTap,
-                          child: Tooltip(
-                            message: 'Edit',
-                            child: Container(
-                              padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                    _layerInteractionButtonRadius * 2),
-                                color: Colors.white,
-                              ),
-                              child: Icon(
-                                Icons.edit,
-                                color: Colors.black,
-                                size: _layerInteractionButtonRadius * 2,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                stream: rebuildStream,
-              ),
-              removeIcon:
-                  (rebuildStream, onTap, toggleTooltipVisibility, rotation) =>
-                      ReactiveCustomWidget(
-                builder: (_) {
-                  return Positioned(
-                    top: 0,
-                    left: 0,
-                    child: Transform.rotate(
-                      angle: rotation,
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: onTap,
-                          child: Tooltip(
-                            message: 'Remove',
-                            child: Container(
-                              padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                    _layerInteractionButtonRadius * 2),
-                                color: Colors.white,
-                              ),
-                              child: Icon(
-                                Icons.close,
-                                color: Colors.black,
-                                size: _layerInteractionButtonRadius * 2,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                stream: rebuildStream,
-              ),
-              rotateScaleIcon: (rebuildStream, onScaleRotateDown,
-                      onScaleRotateUp, toggleTooltipVisibility, rotation) =>
-                  ReactiveCustomWidget(
-                builder: (_) {
-                  return Positioned(
-                    /// IMPORTANT: The editor currently only supports this
-                    /// position for rotation to function correctly
-                    bottom: 0,
-                    right: 0,
-                    child: Transform.rotate(
-                      angle: rotation,
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Listener(
-                          onPointerDown: onScaleRotateDown,
-                          onPointerUp: onScaleRotateUp,
-                          child: Tooltip(
-                            message: 'Rotate',
-                            child: Container(
-                              padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                    _layerInteractionButtonRadius * 2),
-                                color: Colors.white,
-                              ),
-                              child: Icon(
-                                Icons.rotate_90_degrees_ccw,
-                                color: Colors.black,
-                                size: _layerInteractionButtonRadius * 2,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                stream: rebuildStream,
               ),
             ),
           ),
@@ -711,19 +584,18 @@ class _CustomAppbarBottombarExampleState
                       ),
                       onPressed: editor.openEmojiEditor,
                     ),
-                    /* Be careful with the sticker editor. It's important you 
-                    add your own logic how to load items in 
-                    `stickerEditorConfigs`.
-                      FlatIconTextButton(
-                        key: const ValueKey('open-sticker-editor-btn'),
-                        label: Text('Sticker', style: bottomTextStyle),
-                        icon: const Icon(
-                          Icons.layers_outlined,
-                          size: 22.0,
-                          color: Colors.white,
-                        ),
-                        onPressed: editor.openStickerEditor,
-                      ), */
+                    /* Be careful with the sticker editor. It's important you add 
+                             your own logic how to load items in `stickerEditorConfigs`.
+                              FlatIconTextButton(
+                                key: const ValueKey('open-sticker-editor-btn'),
+                                label: Text('Sticker', style: bottomTextStyle),
+                                icon: const Icon(
+                                  Icons.layers_outlined,
+                                  size: 22.0,
+                                  color: Colors.white,
+                                ),
+                                onPressed: editor.openStickerEditor,
+                              ), */
                   ],
                 ),
               ),

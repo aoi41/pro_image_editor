@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 class FlatIconTextButton extends TextButton {
   /// Creates a [FlatIconTextButton] widget with the specified properties.
   ///
-  /// The [icon] and [label] parameters are required, while the others are
-  /// optional.
+  /// The [icon] and [label] parameters are required, while the others are optional.
   FlatIconTextButton({
     super.key,
     super.onPressed,
     super.clipBehavior,
     super.focusNode,
-    double spacing = 5.0,
     required Widget icon,
     required Widget label,
   }) : super(
@@ -25,7 +23,7 @@ class FlatIconTextButton extends TextButton {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               icon,
-              SizedBox(height: spacing),
+              const SizedBox(height: 5.0),
               label,
             ],
           ),

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:pro_image_editor/mixins/converted_callbacks.dart';
-import 'package:pro_image_editor/models/tune_editor/tune_adjustment_matrix.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 import '../models/crop_rotate_editor/transform_factors.dart';
 import '../models/init_configs/editor_init_configs.dart';
@@ -25,8 +24,7 @@ mixin StandaloneEditor<T extends EditorInitConfigs> {
   EditorImage get editorImage;
 }
 
-/// A mixin providing access to standalone editor configurations and image
-/// within a state.
+/// A mixin providing access to standalone editor configurations and image within a state.
 mixin StandaloneEditorState<T extends StatefulWidget,
         I extends EditorInitConfigs>
     on State<T>, ImageEditorConvertedConfigs, ImageEditorConvertedCallbacks {
@@ -42,15 +40,14 @@ mixin StandaloneEditorState<T extends StatefulWidget,
   @override
   ProImageEditorCallbacks get callbacks => initConfigs.callbacks;
 
-  /// Helper stream to rebuild widgets.
   @protected
-  late final StreamController<void> rebuildController;
+  late final StreamController rebuildController;
 
   /// Returns the theme data for the editor.
   ThemeData get theme => initConfigs.theme;
 
-  /// Returns the initial transformation configurations for the editor.
-  TransformConfigs? get initialTransformConfigs => initConfigs.transformConfigs;
+  /// Returns the transformation configurations for the editor.
+  TransformConfigs? get transformConfigs => initConfigs.transformConfigs;
 
   /// Returns the layers in the editor.
   List<Layer>? get layers => initConfigs.layers;
@@ -60,10 +57,6 @@ mixin StandaloneEditorState<T extends StatefulWidget,
 
   /// Returns the applied filters.
   FilterMatrix get appliedFilters => initConfigs.appliedFilters;
-
-  /// Returns the applied tune adjustments.
-  List<TuneAdjustmentMatrix> get appliedTuneAdjustments =>
-      initConfigs.appliedTuneAdjustments;
 
   /// Returns the body size with layers.
   Size? get mainBodySize => initConfigs.mainBodySize;
@@ -91,10 +84,6 @@ mixin StandaloneEditorState<T extends StatefulWidget,
   /// state of a screenshot captured by the isolate.
   final List<ThreadCaptureState> screenshotHistory = [];
 
-  /// Sets the image information data.
-  ///
-  /// This method decodes image information based on the current editor state
-  /// and configuration, ensuring accurate metadata extraction.
   Future<void> setImageInfos({
     TransformConfigs? activeHistory,
     bool? forceUpdate,
@@ -122,19 +111,17 @@ mixin StandaloneEditorState<T extends StatefulWidget,
 
     if (initConfigs.convertToUint8List) {
       createScreenshot = true;
-      LoadingDialog.instance.show(
+      LoadingDialog loading = LoadingDialog();
+      await loading.show(
         context,
         configs: configs,
         theme: theme,
         message: i18n.doneLoadingMsg,
       );
 
-      /// Ensure the image infos are read
+      /// Ensure the image infos are readed
       if (imageInfos == null) await setImageInfos();
-      if (!mounted) {
-        LoadingDialog.instance.hide();
-        return;
-      }
+      if (!mounted) return;
 
       /// Capture the final screenshot
       bool screenshotIsCaptured = screenshotHistoryPosition > 0 &&
@@ -151,8 +138,8 @@ mixin StandaloneEditorState<T extends StatefulWidget,
 
       createScreenshot = false;
 
-      /// Return final image that the user can handle it but still with the
-      /// active loading dialog
+      /// Return final image that the user can handle it but still with the active
+      /// loading dialog
       await initConfigs.onImageEditingComplete
           ?.call(bytes ?? Uint8List.fromList([]));
 
@@ -165,7 +152,7 @@ mixin StandaloneEditorState<T extends StatefulWidget,
       }
 
       /// Hide the loading dialog
-      LoadingDialog.instance.hide();
+      if (mounted) loading.hide(context);
 
       initConfigs.onCloseEditor?.call();
     } else {
@@ -195,17 +182,11 @@ mixin StandaloneEditorState<T extends StatefulWidget,
     }
   }
 
-  /// Takes a screenshot of the current editor state.
-  ///
-  /// This method captures a screenshot of the current editor state, storing
-  /// it in the screenshot history for potential future use.
   @protected
   void takeScreenshot() async {
     if (!initConfigs.convertToUint8List) return;
 
     await setImageInfos();
-    screenshotHistory.removeRange(
-        screenshotHistoryPosition, screenshotHistory.length);
     screenshotHistoryPosition++;
     screenshotCtrl.captureImage(
       imageInfos: imageInfos!,
@@ -230,10 +211,7 @@ mixin StandaloneEditorState<T extends StatefulWidget,
     super.dispose();
   }
 
-  /// Gets the minimum size between two sizes.
-  ///
-  /// This method returns the smaller of two sizes, ensuring that the resulting
-  /// size is neither null nor empty.
+  @protected
   Size getMinimumSize(Size? a, Size b) {
     return a == null || a.isEmpty
         ? b.isEmpty

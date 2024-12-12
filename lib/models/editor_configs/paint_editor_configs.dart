@@ -1,8 +1,5 @@
 // Project imports:
-import 'package:flutter/widgets.dart';
-
 import '../../modules/paint_editor/utils/paint_editor_enum.dart';
-import 'utils/editor_safe_area.dart';
 
 /// Configuration options for a paint editor.
 ///
@@ -30,39 +27,6 @@ import 'utils/editor_safe_area.dart';
 /// );
 /// ```
 class PaintEditorConfigs {
-  /// Creates an instance of PaintEditorConfigs with optional settings.
-  ///
-  /// By default, the editor is enabled, and most drawing tools are enabled.
-  /// Other properties are set to reasonable defaults.
-  const PaintEditorConfigs({
-    this.enabled = true,
-    this.enableZoom = false,
-    this.editorMinScale = 1.0,
-    this.editorMaxScale = 5.0,
-    this.hasOptionFreeStyle = true,
-    this.hasOptionArrow = true,
-    this.hasOptionLine = true,
-    this.hasOptionRect = true,
-    this.hasOptionCircle = true,
-    this.hasOptionDashLine = true,
-    this.hasOptionEraser = true,
-    this.canToggleFill = true,
-    this.canChangeLineWidth = true,
-    this.canChangeOpacity = true,
-    this.initialFill = false,
-    this.boundaryMargin = EdgeInsets.zero,
-    this.minScale = double.negativeInfinity,
-    this.maxScale = double.infinity,
-    this.freeStyleHighPerformanceScaling,
-    this.freeStyleHighPerformanceMoving,
-    this.freeStyleHighPerformanceHero = false,
-    this.initialPaintMode = PaintModeE.freeStyle,
-    this.safeArea = const EditorSafeArea(),
-  })  : assert(maxScale >= minScale,
-            'maxScale must be greater than or equal to minScale'),
-        assert(editorMaxScale > editorMinScale,
-            'editorMaxScale must be greater than editorMinScale');
-
   /// Indicates whether the paint editor is enabled.
   final bool enabled;
 
@@ -74,7 +38,7 @@ class PaintEditorConfigs {
   /// is disabled, and the editor's content remains at a fixed scale.
   ///
   /// Default value is `false`.
-  final bool enableZoom;
+  final bool editorIsZoomable;
 
   /// Indicating whether the free-style drawing option is available.
   final bool hasOptionFreeStyle;
@@ -109,29 +73,21 @@ class PaintEditorConfigs {
   /// Indicates the initial fill state.
   final bool initialFill;
 
-  /// Enables high-performance scaling for free-style drawing when set to
-  /// `true`.
+  /// Enables high-performance scaling for free-style drawing when set to `true`.
   ///
-  /// When this option is enabled, it optimizes scaling for improved
-  /// performance.
-  ///
-  /// By default, it's set to `true` on mobile devices and `false` on desktop
-  /// devices.
+  /// When this option is enabled, it optimizes scaling for improved performance.
+  /// By default, it's set to `true` on mobile devices and `false` on desktop devices.
   final bool? freeStyleHighPerformanceScaling;
 
   /// Enables high-performance moving for free-style drawing when set to `true`.
   ///
   /// When this option is enabled, it optimizes moving for improved performance.
-  ///
   /// By default, it's set to `true` only on mobile-web devices.
   final bool? freeStyleHighPerformanceMoving;
 
-  /// Enables high-performance hero-animations for free-style drawing when set
-  /// to `true`.
+  /// Enables high-performance hero-animations for free-style drawing when set to `true`.
   ///
-  /// When this option is enabled, it optimizes hero-animations for improved
-  /// performance.
-  ///
+  /// When this option is enabled, it optimizes hero-animations for improved performance.
   /// By default, it's set to `false`.
   final bool freeStyleHighPerformanceHero;
 
@@ -141,9 +97,8 @@ class PaintEditorConfigs {
   /// The minimum scale factor for the editor.
   ///
   /// This value determines the lowest level of zoom that can be applied to the
-  /// editor content. It only has an effect when [enableZoom] is set to
-  /// `true`.
-  /// If [enableZoom] is `false`, this value is ignored.
+  /// editor content. It only has an effect when [editorIsZoomable] is set to `true`.
+  /// If [editorIsZoomable] is `false`, this value is ignored.
   ///
   /// Default value is 1.0.
   final double editorMinScale;
@@ -151,30 +106,11 @@ class PaintEditorConfigs {
   /// The maximum scale factor for the editor.
   ///
   /// This value determines the highest level of zoom that can be applied to the
-  /// editor content. It only has an effect when [enableZoom] is set to
-  /// `true`.
-  /// If [enableZoom] is `false`, this value is ignored.
+  /// editor content. It only has an effect when [editorIsZoomable] is set to `true`.
+  /// If [editorIsZoomable] is `false`, this value is ignored.
   ///
   /// Default value is 5.0.
   final double editorMaxScale;
-
-  /// Zoom boundary
-  ///
-  /// A margin for the visible boundaries of the child.
-  ///
-  /// Any transformation that results in the viewport being able to view
-  /// outside of the boundaries will be stopped at the boundary.
-  /// The boundaries do not rotate with the rest of the scene, so they are
-  /// always aligned with the viewport.
-  ///
-  /// To produce no boundaries at all, pass infinite [EdgeInsets], such as
-  /// EdgeInsets.all(double.infinity).
-  ///
-  /// No edge can be NaN.
-  ///
-  /// Defaults to [EdgeInsets.zero], which results in boundaries that are the
-  /// exact same size and position as the [child].
-  final EdgeInsets boundaryMargin;
 
   /// The minimum scale factor from the layer.
   final double minScale;
@@ -182,67 +118,34 @@ class PaintEditorConfigs {
   /// The maximum scale factor from the layer.
   final double maxScale;
 
-  /// Defines the safe area configuration for the editor.
-  final EditorSafeArea safeArea;
-
-  /// Creates a copy of this `PaintEditorConfigs` object with the given fields
-  /// replaced with new values.
+  /// Creates an instance of PaintEditorConfigs with optional settings.
   ///
-  /// The [copyWith] method allows you to create a new instance of
-  /// [PaintEditorConfigs] with some properties updated while keeping the
-  /// others unchanged.
-  PaintEditorConfigs copyWith({
-    bool? enabled,
-    bool? enableZoom,
-    bool? hasOptionFreeStyle,
-    bool? hasOptionArrow,
-    bool? hasOptionLine,
-    bool? hasOptionRect,
-    bool? hasOptionCircle,
-    bool? hasOptionDashLine,
-    bool? hasOptionEraser,
-    bool? canToggleFill,
-    bool? canChangeLineWidth,
-    bool? canChangeOpacity,
-    bool? initialFill,
-    bool? freeStyleHighPerformanceScaling,
-    bool? freeStyleHighPerformanceMoving,
-    bool? freeStyleHighPerformanceHero,
-    PaintModeE? initialPaintMode,
-    double? editorMinScale,
-    double? editorMaxScale,
-    double? minScale,
-    double? maxScale,
-    EditorSafeArea? safeArea,
-    EdgeInsets? boundaryMargin,
-  }) {
-    return PaintEditorConfigs(
-      safeArea: safeArea ?? this.safeArea,
-      enabled: enabled ?? this.enabled,
-      enableZoom: enableZoom ?? this.enableZoom,
-      hasOptionFreeStyle: hasOptionFreeStyle ?? this.hasOptionFreeStyle,
-      hasOptionArrow: hasOptionArrow ?? this.hasOptionArrow,
-      hasOptionLine: hasOptionLine ?? this.hasOptionLine,
-      hasOptionRect: hasOptionRect ?? this.hasOptionRect,
-      hasOptionCircle: hasOptionCircle ?? this.hasOptionCircle,
-      hasOptionDashLine: hasOptionDashLine ?? this.hasOptionDashLine,
-      hasOptionEraser: hasOptionEraser ?? this.hasOptionEraser,
-      canToggleFill: canToggleFill ?? this.canToggleFill,
-      canChangeLineWidth: canChangeLineWidth ?? this.canChangeLineWidth,
-      canChangeOpacity: canChangeOpacity ?? this.canChangeOpacity,
-      initialFill: initialFill ?? this.initialFill,
-      freeStyleHighPerformanceScaling: freeStyleHighPerformanceScaling ??
-          this.freeStyleHighPerformanceScaling,
-      freeStyleHighPerformanceMoving:
-          freeStyleHighPerformanceMoving ?? this.freeStyleHighPerformanceMoving,
-      freeStyleHighPerformanceHero:
-          freeStyleHighPerformanceHero ?? this.freeStyleHighPerformanceHero,
-      initialPaintMode: initialPaintMode ?? this.initialPaintMode,
-      editorMinScale: editorMinScale ?? this.editorMinScale,
-      editorMaxScale: editorMaxScale ?? this.editorMaxScale,
-      boundaryMargin: boundaryMargin ?? this.boundaryMargin,
-      minScale: minScale ?? this.minScale,
-      maxScale: maxScale ?? this.maxScale,
-    );
-  }
+  /// By default, the editor is enabled, and most drawing tools are enabled.
+  /// Other properties are set to reasonable defaults.
+  const PaintEditorConfigs({
+    this.enabled = true,
+    this.editorIsZoomable = false,
+    this.editorMinScale = 1.0,
+    this.editorMaxScale = 5.0,
+    this.hasOptionFreeStyle = true,
+    this.hasOptionArrow = true,
+    this.hasOptionLine = true,
+    this.hasOptionRect = true,
+    this.hasOptionCircle = true,
+    this.hasOptionDashLine = true,
+    this.hasOptionEraser = true,
+    this.canToggleFill = true,
+    this.canChangeLineWidth = true,
+    this.canChangeOpacity = true,
+    this.initialFill = false,
+    this.minScale = double.negativeInfinity,
+    this.maxScale = double.infinity,
+    this.freeStyleHighPerformanceScaling,
+    this.freeStyleHighPerformanceMoving,
+    this.freeStyleHighPerformanceHero = false,
+    this.initialPaintMode = PaintModeE.freeStyle,
+  })  : assert(maxScale >= minScale,
+            'maxScale must be greater than or equal to minScale'),
+        assert(editorMaxScale > editorMinScale,
+            'editorMaxScale must be greater than editorMinScale');
 }

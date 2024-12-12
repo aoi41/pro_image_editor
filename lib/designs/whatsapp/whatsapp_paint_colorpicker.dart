@@ -7,33 +7,13 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:pro_image_editor/pro_image_editor.dart';
 
-/// A stateless widget that provides a color picker for painting in the
-/// WhatsApp theme.
-///
-/// This widget allows users to select colors for painting operations within
-/// a painting editor, using a design inspired by WhatsApp.
 class WhatsappPaintColorpicker extends StatelessWidget {
-  /// Creates a [WhatsappPaintColorpicker] widget.
-  ///
-  /// This color picker lets users select colors for painting within a painting
-  /// editor, integrating seamlessly with the WhatsApp theme.
-  ///
-  /// Example:
-  /// ```
-  /// WhatsappPaintColorpicker(
-  ///   paintEditor: myPaintEditorState,
-  /// )
-  /// ```
+  final PaintingEditorState paintEditor;
+
   const WhatsappPaintColorpicker({
     super.key,
     required this.paintEditor,
   });
-
-  /// The state of the painting editor associated with this color picker.
-  ///
-  /// This state allows the color picker to interact with the painting editor,
-  /// providing necessary controls to manage painting color selections.
-  final PaintingEditorState paintEditor;
 
   @override
   Widget build(BuildContext context) {

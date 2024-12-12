@@ -47,12 +47,19 @@ export './widgets/draw_painting.dart';
 /// provided parameters.
 class PaintingEditor extends StatefulWidget
     with StandaloneEditor<PaintEditorInitConfigs> {
+  @override
+  final PaintEditorInitConfigs initConfigs;
+  @override
+  final EditorImage editorImage;
+
+  /// A flag indicating whether only painting operations are allowed.
+  final bool paintingOnly;
+
   /// Constructs a `PaintingEditor` widget.
   ///
   /// The [key] parameter is used to provide a key for the widget.
   /// The [editorImage] parameter specifies the image to be edited.
-  /// The [initConfigs] parameter specifies the initialization configurations
-  /// for the editor.
+  /// The [initConfigs] parameter specifies the initialization configurations for the editor.
   const PaintingEditor._({
     super.key,
     required this.editorImage,
@@ -99,8 +106,7 @@ class PaintingEditor extends StatefulWidget
     );
   }
 
-  /// Constructs a `PaintingEditor` widget with an image loaded from a network
-  /// URL.
+  /// Constructs a `PaintingEditor` widget with an image loaded from a network URL.
   factory PaintingEditor.network(
     String networkUrl, {
     Key? key,
@@ -126,8 +132,7 @@ class PaintingEditor extends StatefulWidget
     );
   }
 
-  /// Constructs a `PaintingEditor` widget with an image loaded automatically
-  /// based on the provided source.
+  /// Constructs a `PaintingEditor` widget with an image loaded automatically based on the provided source.
   ///
   /// Either [byteArray], [file], [networkUrl], or [assetPath] must be provided.
   factory PaintingEditor.autoSource({
@@ -164,24 +169,14 @@ class PaintingEditor extends StatefulWidget
       );
     } else {
       throw ArgumentError(
-          "Either 'byteArray', 'file', 'networkUrl' or 'assetPath' "
-          'must be provided.');
+          "Either 'byteArray', 'file', 'networkUrl' or 'assetPath' must be provided.");
     }
   }
-  @override
-  final PaintEditorInitConfigs initConfigs;
-  @override
-  final EditorImage editorImage;
-
-  /// A flag indicating whether only painting operations are allowed.
-  final bool paintingOnly;
 
   @override
   State<PaintingEditor> createState() => PaintingEditorState();
 }
 
-/// State class for managing the painting editor, handling user interactions
-/// and painting operations.
 class PaintingEditorState extends State<PaintingEditor>
     with
         ImageEditorConvertedConfigs,
@@ -194,13 +189,12 @@ class PaintingEditorState extends State<PaintingEditor>
   late final PaintingController paintCtrl;
 
   /// Update the color picker.
-  late final StreamController<void> uiPickerStream;
+  late final StreamController uiPickerStream;
 
   /// Update the appbar icons.
-  late final StreamController<void> _uiAppbarIconsStream;
+  late final StreamController _uiAppbarIconsStream;
 
-  /// A ScrollController for controlling the scrolling behavior of the bottom
-  /// navigation bar.
+  /// A ScrollController for controlling the scrolling behavior of the bottom navigation bar.
   late ScrollController _bottomBarScrollCtrl;
 
   /// A boolean flag representing whether the fill mode is enabled or disabled.
@@ -282,12 +276,8 @@ class PaintingEditorState extends State<PaintingEditor>
           ),
       ];
 
-  /// The Uint8List from the fake hero image, which is drawn when finish
-  /// editing.
+  /// The Uint8List from the fake hero image, which is drawed when finish editing.
   Uint8List? _fakeHeroBytes;
-
-  /// Indicates whether the editor supports zoom functionality.
-  bool get _enableZoom => paintEditorConfigs.enableZoom;
 
   @override
   void initState() {
@@ -336,7 +326,6 @@ class PaintingEditorState extends State<PaintingEditor>
     super.setState(fn);
   }
 
-  /// Initializes stream controllers for managing UI updates.
   void initStreamControllers() {
     uiPickerStream = StreamController.broadcast();
     _uiAppbarIconsStream = StreamController.broadcast();
@@ -491,8 +480,7 @@ class PaintingEditorState extends State<PaintingEditor>
   }
 
   /// Sets the fill mode for drawing elements.
-  /// When the `fill` parameter is `true`, drawing elements will be filled;
-  /// otherwise, they will be outlined.
+  /// When the `fill` parameter is `true`, drawing elements will be filled; otherwise, they will be outlined.
   void setFill(bool fill) {
     paintCtrl.setFill(fill);
     _uiAppbarIconsStream.add(null);
@@ -544,10 +532,8 @@ class PaintingEditorState extends State<PaintingEditor>
     paintEditorCallbacks?.handleRedo();
   }
 
-  /// Finishes editing in the painting editor and returns the painted items as
-  /// a result.
-  /// If no changes have been made, it closes the editor without returning any
-  /// changes.
+  /// Finishes editing in the painting editor and returns the painted items as a result.
+  /// If no changes have been made, it closes the editor without returning any changes.
   void done() async {
     doneEditing(
         editorImage: widget.editorImage,
@@ -569,8 +555,7 @@ class PaintingEditorState extends State<PaintingEditor>
 
   /// Exports the painted items as a list of [PaintingLayerData].
   ///
-  /// This method converts the painting history into a list of
-  /// [PaintingLayerData] representing the painted items.
+  /// This method converts the painting history into a list of [PaintingLayerData] representing the painted items.
   ///
   /// Example:
   /// ```dart
@@ -689,28 +674,20 @@ class PaintingEditorState extends State<PaintingEditor>
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: imageEditorTheme.uiOverlayStyle,
-      child: ExtendedPopScope(
-        child: Theme(
-          data: theme.copyWith(
-              tooltipTheme: theme.tooltipTheme.copyWith(preferBelow: true)),
-          child: SafeArea(
-            top: paintEditorConfigs.safeArea.top,
-            bottom: paintEditorConfigs.safeArea.bottom,
-            left: paintEditorConfigs.safeArea.left,
-            right: paintEditorConfigs.safeArea.right,
-            child: RecordInvisibleWidget(
-              controller: screenshotCtrl,
-              child: LayoutBuilder(builder: (context, constraints) {
-                return Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  backgroundColor: imageEditorTheme.paintingEditor.background,
-                  appBar: _buildAppBar(constraints),
-                  body: _buildBody(),
-                  bottomNavigationBar: _buildBottomBar(),
-                );
-              }),
-            ),
-          ),
+      child: Theme(
+        data: theme.copyWith(
+            tooltipTheme: theme.tooltipTheme.copyWith(preferBelow: true)),
+        child: RecordInvisibleWidget(
+          controller: screenshotCtrl,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: imageEditorTheme.paintingEditor.background,
+              appBar: _buildAppBar(constraints),
+              body: _buildBody(),
+              bottomNavigationBar: _buildBottomBar(),
+            );
+          }),
         ),
       ),
     );
@@ -735,7 +712,7 @@ class PaintingEditorState extends State<PaintingEditor>
   /// Builds an action bar depending on the allowed space
   List<Widget> _buildAction(BoxConstraints constraints) {
     const int defaultIconButtonSize = 48;
-    final List<StreamBuilder<void>> configButtons = _getConfigButtons();
+    final List<StreamBuilder> configButtons = _getConfigButtons();
     final List<Widget> actionButtons = _getActionButtons();
 
     // Taking into account the back button
@@ -844,7 +821,7 @@ class PaintingEditorState extends State<PaintingEditor>
 
   /// Builds and returns a list of IconButton to change the line width /
   /// toggle fill or un-fill / change the opacity.
-  List<StreamBuilder<void>> _getConfigButtons() => [
+  List<StreamBuilder> _getConfigButtons() => [
         if (paintEditorConfigs.canChangeLineWidth)
           StreamBuilder(
               stream: _uiAppbarIconsStream.stream,
@@ -962,8 +939,7 @@ class PaintingEditorState extends State<PaintingEditor>
                   : [
                       ExtendedInteractiveViewer(
                         key: _interactiveViewer,
-                        enableZoom: _enableZoom,
-                        boundaryMargin: paintEditorConfigs.boundaryMargin,
+                        editorIsZoomable: paintEditorConfigs.editorIsZoomable,
                         minScale: paintEditorConfigs.editorMinScale,
                         maxScale: paintEditorConfigs.editorMaxScale,
                         enableInteraction: paintMode == PaintModeE.moveAndZoom,
@@ -997,7 +973,7 @@ class PaintingEditorState extends State<PaintingEditor>
                               if (!widget.paintingOnly)
                                 TransformedContentGenerator(
                                   configs: configs,
-                                  transformConfigs: initialTransformConfigs ??
+                                  transformConfigs: transformConfigs ??
                                       TransformConfigs.empty(),
                                   child: FilteredImage(
                                     width: getMinimumSize(
@@ -1009,7 +985,6 @@ class PaintingEditorState extends State<PaintingEditor>
                                     configs: configs,
                                     image: editorImage,
                                     filters: appliedFilters,
-                                    tuneAdjustments: appliedTuneAdjustments,
                                     blurFactor: appliedBlurFactor,
                                   ),
                                 )
@@ -1030,14 +1005,10 @@ class PaintingEditorState extends State<PaintingEditor>
                                     mainImageSize: getMinimumSize(
                                         mainImageSize, editorBodySize),
                                     editorBodySize: editorBodySize,
-                                    transformConfigs: initialTransformConfigs,
+                                    transformConfigs: transformConfigs,
                                   ),
                                 ),
                               _buildPainter(),
-                              if (customWidgets.paintEditor.bodyItemsRecorded !=
-                                  null)
-                                ...customWidgets.paintEditor.bodyItemsRecorded!(
-                                    this, rebuildController.stream),
                             ],
                           ),
                         ),
@@ -1065,8 +1036,10 @@ class PaintingEditorState extends State<PaintingEditor>
     if (paintModes.length <= 1) return const SizedBox.shrink();
 
     double minWidth = min(MediaQuery.of(context).size.width, 600);
-    double maxWidth =
-        max((paintModes.length + (_enableZoom ? 1 : 0)) * 80, minWidth);
+    double maxWidth = max(
+        (paintModes.length + (paintEditorConfigs.editorIsZoomable ? 1 : 0)) *
+            80,
+        minWidth);
     return Theme(
       data: theme,
       child: Scrollbar(
@@ -1103,7 +1076,7 @@ class PaintingEditorState extends State<PaintingEditor>
                     runAlignment: WrapAlignment.spaceAround,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: <Widget>[
-                      if (_enableZoom) ...[
+                      if (paintEditorConfigs.editorIsZoomable) ...[
                         FlatIconTextButton(
                           label: Text(
                             i18n.paintEditor.moveAndZoom,

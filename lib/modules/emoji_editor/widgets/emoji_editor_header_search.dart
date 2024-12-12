@@ -1,12 +1,16 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+
+// Project imports:
 import 'package:pro_image_editor/models/i18n/i18n.dart';
 import 'package:pro_image_editor/models/theme/theme_shared_values.dart';
 
-/// Search view header for the emoji editor, allowing search input and emoji
-/// display.
 class EmojiEditorHeaderSearchView extends SearchView {
-  /// Constructor for creating an instance of EmojiEditorHeaderSearchView.
+  final I18n i18n;
+
   const EmojiEditorHeaderSearchView(
     super.config,
     super.state,
@@ -15,24 +19,16 @@ class EmojiEditorHeaderSearchView extends SearchView {
     required this.i18n,
   });
 
-  /// Localization and internationalization settings.
-  final I18n i18n;
-
-  /// Creates the state for HeaderSearchViewState.
   @override
   // ignore: no_logic_in_create_state
   HeaderSearchViewState createState() => HeaderSearchViewState(i18n);
 }
 
-/// State class for EmojiEditorHeaderSearchView, extending SearchViewState.
 class HeaderSearchViewState extends SearchViewState {
-  /// Constructor for creating the state with internationalization settings.
-  HeaderSearchViewState(this.i18n);
-
-  /// Localization and internationalization settings.
   final I18n i18n;
 
-  /// Builds the widget tree for the header search view.
+  HeaderSearchViewState(this.i18n);
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -64,7 +60,7 @@ class HeaderSearchViewState extends SearchViewState {
               children: [
                 IconButton(
                   onPressed: widget.showEmojiView,
-                  color: widget.config.searchViewConfig.buttonIconColor,
+                  color: widget.config.searchViewConfig.buttonColor,
                   icon: Icon(
                     Icons.arrow_back,
                     color: widget.config.searchViewConfig.buttonIconColor,

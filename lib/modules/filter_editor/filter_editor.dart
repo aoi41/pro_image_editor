@@ -2,14 +2,16 @@
 import 'dart:async';
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Project imports:
 import 'package:pro_image_editor/mixins/converted_callbacks.dart';
 import 'package:pro_image_editor/models/transform_helper.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:pro_image_editor/utils/content_recorder.dart/utils/record_invisible_widget.dart';
-
 import '../../mixins/converted_configs.dart';
 import '../../mixins/standalone_editor.dart';
 import '../../models/crop_rotate_editor/transform_factors.dart';
@@ -19,28 +21,31 @@ import '../../widgets/transform/transformed_content_generator.dart';
 import 'types/filter_matrix.dart';
 import 'widgets/filtered_image.dart';
 
-export 'utils/filter_generator/filter_addons.dart';
-export 'utils/filter_generator/filter_model.dart';
 export 'utils/filter_generator/filter_presets.dart';
+export 'utils/filter_generator/filter_model.dart';
+export 'utils/filter_generator/filter_addons.dart';
 export 'widgets/filter_editor_item_list.dart';
 
-/// The `FilterEditor` widget allows users to editing images with filters
+/// The `FilterEditor` widget allows users to editing images with painting tools.
 ///
 /// You can create a `FilterEditor` using one of the factory methods provided:
 /// - `FilterEditor.file`: Loads an image from a file.
 /// - `FilterEditor.asset`: Loads an image from an asset.
 /// - `FilterEditor.network`: Loads an image from a network URL.
 /// - `FilterEditor.memory`: Loads an image from memory as a `Uint8List`.
-/// - `FilterEditor.autoSource`: Automatically selects the source based on
-/// provided parameters.
+/// - `FilterEditor.autoSource`: Automatically selects the source based on provided parameters.
 class FilterEditor extends StatefulWidget
     with StandaloneEditor<FilterEditorInitConfigs> {
+  @override
+  final FilterEditorInitConfigs initConfigs;
+  @override
+  final EditorImage editorImage;
+
   /// Constructs a `FilterEditor` widget.
   ///
   /// The [key] parameter is used to provide a key for the widget.
   /// The [editorImage] parameter specifies the image to be edited.
-  /// The [initConfigs] parameter specifies the initialization configurations
-  /// for the editor.
+  /// The [initConfigs] parameter specifies the initialization configurations for the editor.
   const FilterEditor._({
     super.key,
     required this.editorImage,
@@ -86,8 +91,7 @@ class FilterEditor extends StatefulWidget
     );
   }
 
-  /// Constructs a `FilterEditor` widget with an image loaded from a network
-  /// URL.
+  /// Constructs a `FilterEditor` widget with an image loaded from a network URL.
   factory FilterEditor.network(
     String networkUrl, {
     Key? key,
@@ -100,8 +104,7 @@ class FilterEditor extends StatefulWidget
     );
   }
 
-  /// Constructs a `FilterEditor` widget with an image loaded automatically
-  /// based on the provided source.
+  /// Constructs a `FilterEditor` widget with an image loaded automatically based on the provided source.
   ///
   /// Either [byteArray], [file], [networkUrl], or [assetPath] must be provided.
   factory FilterEditor.autoSource({
@@ -138,14 +141,9 @@ class FilterEditor extends StatefulWidget
       );
     } else {
       throw ArgumentError(
-          "Either 'byteArray', 'file', 'networkUrl' or 'assetPath' must "
-          'be provided.');
+          "Either 'byteArray', 'file', 'networkUrl' or 'assetPath' must be provided.");
     }
   }
-  @override
-  final FilterEditorInitConfigs initConfigs;
-  @override
-  final EditorImage editorImage;
 
   @override
   createState() => FilterEditorState();
@@ -158,7 +156,7 @@ class FilterEditorState extends State<FilterEditor>
         ImageEditorConvertedCallbacks,
         StandaloneEditorState<FilterEditor, FilterEditorInitConfigs> {
   /// Update the image with the applied filter and the slider value.
-  late final StreamController<void> _uiFilterStream;
+  late final StreamController _uiFilterStream;
 
   /// The selected filter.
   FilterModel selectedFilter = PresetFilters.none;
@@ -190,8 +188,7 @@ class FilterEditorState extends State<FilterEditor>
     super.setState(fn);
   }
 
-  /// Handles the "Done" action, either by applying changes or closing the
-  /// editor.
+  /// Handles the "Done" action, either by applying changes or closing the editor.
   void done() async {
     doneEditing(
       editorImage: widget.editorImage,
@@ -208,15 +205,8 @@ class FilterEditorState extends State<FilterEditor>
     ];
   }
 
-  /// Set the current filter.
   void setFilter(FilterModel filter) {
     selectedFilter = filter;
-    _uiFilterStream.add(null);
-  }
-
-  /// Set the current filter opacity.
-  void setFilterOpacity(double value) {
-    filterOpacity = value;
     _uiFilterStream.add(null);
   }
 
@@ -240,23 +230,15 @@ class FilterEditorState extends State<FilterEditor>
     return Theme(
       data: theme.copyWith(
           tooltipTheme: theme.tooltipTheme.copyWith(preferBelow: true)),
-      child: ExtendedPopScope(
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: imageEditorTheme.uiOverlayStyle,
-          child: SafeArea(
-            top: filterEditorConfigs.safeArea.top,
-            bottom: filterEditorConfigs.safeArea.bottom,
-            left: filterEditorConfigs.safeArea.left,
-            right: filterEditorConfigs.safeArea.right,
-            child: RecordInvisibleWidget(
-              controller: screenshotCtrl,
-              child: Scaffold(
-                backgroundColor: imageEditorTheme.filterEditor.background,
-                appBar: _buildAppBar(),
-                body: _buildBody(),
-                bottomNavigationBar: _buildBottomNavBar(),
-              ),
-            ),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: imageEditorTheme.uiOverlayStyle,
+        child: RecordInvisibleWidget(
+          controller: screenshotCtrl,
+          child: Scaffold(
+            backgroundColor: imageEditorTheme.filterEditor.background,
+            appBar: _buildAppBar(),
+            body: _buildBody(),
+            bottomNavigationBar: _buildBottomNavBar(),
           ),
         ),
       ),
@@ -296,66 +278,52 @@ class FilterEditorState extends State<FilterEditor>
   Widget _buildBody() {
     return LayoutBuilder(builder: (context, constraints) {
       editorBodySize = constraints.biggest;
-      return Stack(
-        alignment: Alignment.center,
-        fit: StackFit.expand,
-        children: [
-          ContentRecorder(
-            controller: screenshotCtrl,
-            child: Stack(
-              alignment: Alignment.center,
-              fit: StackFit.expand,
-              children: [
-                Hero(
-                  tag: heroTag,
-                  createRectTween: (begin, end) =>
-                      RectTween(begin: begin, end: end),
-                  child: TransformedContentGenerator(
-                    configs: configs,
-                    transformConfigs:
-                        initialTransformConfigs ?? TransformConfigs.empty(),
-                    child: StreamBuilder(
-                        stream: _uiFilterStream.stream,
-                        builder: (context, snapshot) {
-                          return FilteredImage(
-                            width: getMinimumSize(mainImageSize, editorBodySize)
-                                .width,
-                            height:
-                                getMinimumSize(mainImageSize, editorBodySize)
-                                    .height,
-                            configs: configs,
-                            image: editorImage,
-                            filters: _getActiveFilters(),
-                            tuneAdjustments: appliedTuneAdjustments,
-                            blurFactor: appliedBlurFactor,
-                          );
-                        }),
-                  ),
-                ),
-                if (filterEditorConfigs.showLayers && layers != null)
-                  LayerStack(
-                    transformHelper: TransformHelper(
-                      mainBodySize:
-                          getMinimumSize(mainBodySize, editorBodySize),
-                      mainImageSize:
-                          getMinimumSize(mainImageSize, editorBodySize),
-                      editorBodySize: editorBodySize,
-                      transformConfigs: initialTransformConfigs,
-                    ),
-                    configs: configs,
-                    layers: layers!,
-                    clipBehavior: Clip.none,
-                  ),
-                if (customWidgets.filterEditor.bodyItemsRecorded != null)
-                  ...customWidgets.filterEditor.bodyItemsRecorded!(
-                      this, rebuildController.stream),
-              ],
+      return ContentRecorder(
+        controller: screenshotCtrl,
+        child: Stack(
+          alignment: Alignment.center,
+          fit: StackFit.expand,
+          children: [
+            Hero(
+              tag: heroTag,
+              createRectTween: (begin, end) =>
+                  RectTween(begin: begin, end: end),
+              child: TransformedContentGenerator(
+                configs: configs,
+                transformConfigs: transformConfigs ?? TransformConfigs.empty(),
+                child: StreamBuilder(
+                    stream: _uiFilterStream.stream,
+                    builder: (context, snapshot) {
+                      return FilteredImage(
+                        width:
+                            getMinimumSize(mainImageSize, editorBodySize).width,
+                        height: getMinimumSize(mainImageSize, editorBodySize)
+                            .height,
+                        configs: configs,
+                        image: editorImage,
+                        filters: _getActiveFilters(),
+                        blurFactor: appliedBlurFactor,
+                      );
+                    }),
+              ),
             ),
-          ),
-          if (customWidgets.filterEditor.bodyItems != null)
-            ...customWidgets.filterEditor.bodyItems!(
-                this, rebuildController.stream),
-        ],
+            if (filterEditorConfigs.showLayers && layers != null)
+              LayerStack(
+                transformHelper: TransformHelper(
+                  mainBodySize: getMinimumSize(mainBodySize, editorBodySize),
+                  mainImageSize: getMinimumSize(mainImageSize, editorBodySize),
+                  editorBodySize: editorBodySize,
+                  transformConfigs: transformConfigs,
+                ),
+                configs: configs,
+                layers: layers!,
+                clipBehavior: Clip.none,
+              ),
+            if (customWidgets.filterEditor.bodyItems != null)
+              ...customWidgets.filterEditor.bodyItems!(
+                  this, rebuildController.stream),
+          ],
+        ),
       );
     });
   }
@@ -410,7 +378,7 @@ class FilterEditorState extends State<FilterEditor>
                 activeFilters: appliedFilters,
                 blurFactor: appliedBlurFactor,
                 configs: configs,
-                transformConfigs: initialTransformConfigs,
+                transformConfigs: transformConfigs,
                 selectedFilter: selectedFilter.filters,
                 onSelectFilter: (filter) {
                   selectedFilter = filter;

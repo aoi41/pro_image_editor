@@ -1,37 +1,24 @@
+// Dart imports:
 import 'dart:math';
 
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+
+// Project imports:
 import 'package:pro_image_editor/models/i18n/i18n_emoji_editor.dart';
 import 'package:pro_image_editor/models/theme/theme.dart';
 import 'package:pro_image_editor/modules/emoji_editor/utils/emoji_state_manager.dart';
-
 import '../../../utils/pro_image_editor_mode.dart';
 import 'emoji_cell_extended.dart';
 
-/// A widget that provides an enhanced emoji picker view.
-///
-/// This class extends [EmojiPickerView] to offer additional configuration and
-/// customization options for displaying an emoji picker, including support for
-/// internationalization and theming.
 class ProEmojiPickerView extends EmojiPickerView {
-  /// Creates an instance of [ProEmojiPickerView].
-  ///
-  /// The constructor initializes the emoji picker with the provided
-  /// configuration, state, search bar visibility control, and additional
-  /// settings for internationalization and theming.
-  ///
-  /// Example:
-  /// ```
-  /// ProEmojiPickerView(
-  ///   config: myConfig,
-  ///   state: myState,
-  ///   showSearchBar: () => setState(() => showSearch = true),
-  ///   scrollController: myScrollController,
-  ///   i18nEmojiEditor: myI18nEmojiEditor,
-  ///   themeEmojiEditor: myThemeEmojiEditor,
-  /// )
-  /// ```
+  final ScrollController? scrollController;
+  final I18nEmojiEditor i18nEmojiEditor;
+  final EmojiEditorTheme themeEmojiEditor;
+
   const ProEmojiPickerView({
     required Config config,
     required EmojiViewState state,
@@ -41,25 +28,6 @@ class ProEmojiPickerView extends EmojiPickerView {
     required this.themeEmojiEditor,
     super.key,
   }) : super(config, state, showSearchBar);
-
-  /// The scroll controller for the emoji picker view.
-  ///
-  /// This [ScrollController] allows for controlling and monitoring the
-  /// scrolling behavior of the emoji picker list, enhancing navigation.
-  final ScrollController? scrollController;
-
-  /// Internationalization settings for the emoji editor.
-  ///
-  /// This [I18nEmojiEditor] object provides localized text and messages for
-  /// the emoji picker, allowing for multilingual support.
-  final I18nEmojiEditor i18nEmojiEditor;
-
-  /// Theme settings for the emoji editor.
-  ///
-  /// This [EmojiEditorTheme] object contains styling options for the emoji
-  /// picker, enabling customization of colors, fonts, and other visual
-  /// aspects.
-  final EmojiEditorTheme themeEmojiEditor;
 
   @override
   State<ProEmojiPickerView> createState() => _DefaultEmojiPickerViewState();
@@ -96,7 +64,9 @@ class _DefaultEmojiPickerViewState extends State<ProEmojiPickerView>
       animationDuration: const Duration(milliseconds: 200),
     );
     _pageController = PageController(initialPage: initCategory)
-      ..addListener(closeSkinToneOverlay);
+      ..addListener(() {
+        closeSkinToneOverlay();
+      });
 
     _scrollController.addListener(closeSkinToneOverlay);
 
@@ -282,24 +252,19 @@ class _DefaultEmojiPickerViewState extends State<ProEmojiPickerView>
             buttonMode: widget.config.emojiViewConfig.buttonMode,
             child: Column(
               children: [
-                widget.config.viewOrderConfig.top,
-                widget.config.viewOrderConfig.middle,
-                widget.config.viewOrderConfig.bottom,
-              ].map(
-                (item) {
-                  switch (item) {
-                    case EmojiPickerItem.categoryBar:
-                      // Category view
-                      return _buildCategoryView();
-                    case EmojiPickerItem.emojiView:
-                      // Emoji view
-                      return _buildEmojiView();
-                    case EmojiPickerItem.searchBar:
-                      // Search Bar
-                      return _buildSearchBar();
-                  }
-                },
-              ).toList(),
+                // Category view or bottom search bar
+                widget.config.swapCategoryAndBottomBar
+                    ? _buildSearchBar()
+                    : _buildCategoryView(),
+
+                // Emoji view
+                _buildEmojiView(),
+
+                // Bottom Search Bar or Category view
+                widget.config.swapCategoryAndBottomBar
+                    ? _buildCategoryView()
+                    : _buildSearchBar(),
+              ],
             ),
           );
         },

@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 // Project imports:
 import 'outside_render_proxy_box.dart';
 
-/// OutsideRenderSemanticsGestureHandler
 class OutsideRenderSemanticsGestureHandler
     extends OutsideRenderProxyBoxWithHitTestBehavior {
   /// Creates a render object that listens for specific semantic gestures.
@@ -60,8 +59,7 @@ class OutsideRenderSemanticsGestureHandler
     }
   }
 
-  /// Called when the user presses on the render object for a long period of
-  /// time.
+  /// Called when the user presses on the render object for a long period of time.
   GestureLongPressCallback? get onLongPress => _onLongPress;
   GestureLongPressCallback? _onLongPress;
   set onLongPress(GestureLongPressCallback? value) {

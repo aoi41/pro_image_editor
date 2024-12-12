@@ -11,9 +11,7 @@ import '../utils/example_constants.dart';
 import '../utils/example_helper.dart';
 import '../utils/import_history_demo_data.dart';
 
-/// The import export example
 class ImportExportExample extends StatefulWidget {
-  /// Creates a new [ImportExportExample] widget.
   const ImportExportExample({super.key});
 
   @override
@@ -29,7 +27,7 @@ class _ImportExportExampleState extends State<ImportExportExample>
         await precacheImage(
             AssetImage(ExampleConstants.of(context)!.demoAssetPath), context);
         if (!context.mounted) return;
-        await Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => _buildEditor(),
@@ -54,7 +52,7 @@ class _ImportExportExampleState extends State<ImportExportExample>
             onCloseEditor: onCloseEditor,
           ),
           configs: ProImageEditorConfigs(
-              imageGenerationConfigs: const ImageGenerationConfigs(
+              imageGenerationConfigs: const ImageGeneratioConfigs(
                 generateImageInBackground: false,
               ),
               designMode: platformDesignMode,

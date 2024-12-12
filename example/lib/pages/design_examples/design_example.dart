@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:example/pages/design_examples/frosted_glass_example.dart';
-import 'package:example/pages/design_examples/grounded_example.dart';
 import 'package:example/pages/design_examples/highly_configurable_example.dart';
 import 'package:example/utils/example_helper.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,7 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 import '../../utils/example_constants.dart';
 import 'whatsapp_example.dart';
 
-/// The design example widget
 class DesignExample extends StatefulWidget {
-  /// Creates a new [DesignExample] widget.
   const DesignExample({super.key});
 
   @override
@@ -24,7 +21,6 @@ class _DesignExampleState extends State<DesignExample>
     with ExampleHelperState<DesignExample> {
   final String _urlWhatsApp = 'https://picsum.photos/id/350/1500/3000';
   final String _urlFrostedGlass = 'https://picsum.photos/id/28/1500/3000';
-  final String _urlGrounded = 'https://picsum.photos/id/28/1500/3000';
 
   @override
   Widget build(BuildContext context) {
@@ -39,23 +35,11 @@ class _DesignExampleState extends State<DesignExample>
               children: <Widget>[
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'Designs',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
+                  child: Text('Designs',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 ),
                 const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.grass_outlined),
-                  title: const Text('Grounded'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    _openExample(
-                      GroundedDesignExample(url: _urlGrounded),
-                      _urlGrounded,
-                    );
-                  },
-                ),
                 ListTile(
                   leading: const Icon(Icons.auto_awesome),
                   title: const Text('Frosted-Glass'),
@@ -97,25 +81,27 @@ class _DesignExampleState extends State<DesignExample>
       },
       leading: const Icon(Icons.palette_outlined),
       title: const Text('Multiple designs'),
-      subtitle:
-          const Text('Grounded, WhatsApp, Frosted-Glass or custom design'),
+      subtitle: const Text('WhatsApp, Frosted-Glass or custom design'),
       trailing: const Icon(Icons.chevron_right),
     );
   }
 
   void _openExample(Widget example, String url) async {
-    LoadingDialog.instance.show(
+    LoadingDialog loading = LoadingDialog();
+    await loading.show(
       context,
       configs: const ProImageEditorConfigs(),
       theme: ThemeData.dark(),
     );
 
+    if (!mounted) return;
+
     await precacheImage(NetworkImage(_urlFrostedGlass), context);
 
-    LoadingDialog.instance.hide();
+    if (mounted) await loading.hide(context);
 
     if (mounted) {
-      await Navigator.of(context).push(
+      Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => example,
         ),

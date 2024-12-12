@@ -75,10 +75,10 @@ void main() {
       opacity: 1.0,
     );
 
-    controller
-      ..addPaintInfo(paintedModel1)
-      ..addPaintInfo(paintedModel2)
-      ..undo();
+    controller.addPaintInfo(paintedModel1);
+    controller.addPaintInfo(paintedModel2);
+
+    controller.undo();
     expect(controller.activePaintings, [paintedModel1]);
     expect(controller.historyPosition, 1);
 

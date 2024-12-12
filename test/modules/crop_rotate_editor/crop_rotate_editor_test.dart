@@ -23,7 +23,7 @@ void main() {
         fadeInOutsideCropAreaAnimationDuration: Duration.zero,
         opacityOutsideCropAreaDuration: Duration.zero,
       ),
-      imageGenerationConfigs: ImageGenerationConfigs(
+      imageGenerationConfigs: ImageGeneratioConfigs(
         generateImageInBackground: false,
         generateInsideSeparateThread: false,
       ),

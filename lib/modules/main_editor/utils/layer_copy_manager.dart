@@ -6,16 +6,14 @@ import 'package:pro_image_editor/models/layer/layer.dart';
 
 /// A class responsible for managing layers in an image editing environment.
 ///
-/// The `LayerManager` provides methods for copying layers to create new
-/// instances of the same type. It supports various types of layers, including
-/// text, emoji, painting, and sticker layers.
+/// The `LayerManager` provides methods for copying layers to create new instances
+/// of the same type. It supports various types of layers, including text, emoji,
+/// painting, and sticker layers.
 class LayerCopyManager {
   /// Copy a layer to create a new instance of the same type.
   ///
-  /// This method takes a [layer] as input and creates a new instance of the
-  /// same type.
-  /// If the layer type is not recognized, it returns the original layer
-  /// unchanged.
+  /// This method takes a [layer] as input and creates a new instance of the same type.
+  /// If the layer type is not recognized, it returns the original layer unchanged.
   Layer copyLayer(Layer layer) {
     if (layer is TextLayerData) {
       return createCopyTextLayer(layer);
@@ -32,7 +30,7 @@ class LayerCopyManager {
 
   /// Copy a list of layers to create a new instances of the same type.
   List<Layer> copyLayerList(List<Layer> layers) {
-    return layers.map(copyLayer).toList();
+    return layers.map((e) => copyLayer(e)).toList();
   }
 
   /// Create a copy of a TextLayerData instance.
@@ -53,7 +51,6 @@ class LayerCopyManager {
       flipX: layer.flipX,
       flipY: layer.flipY,
       customSecondaryColor: layer.customSecondaryColor,
-      enableInteraction: layer.enableInteraction,
     );
   }
 
@@ -67,7 +64,6 @@ class LayerCopyManager {
       scale: layer.scale,
       flipX: layer.flipX,
       flipY: layer.flipY,
-      enableInteraction: layer.enableInteraction,
     );
   }
 
@@ -81,7 +77,6 @@ class LayerCopyManager {
       scale: layer.scale,
       flipX: layer.flipX,
       flipY: layer.flipY,
-      enableInteraction: layer.enableInteraction,
     );
   }
 
@@ -97,7 +92,6 @@ class LayerCopyManager {
       item: layer.item.copy(),
       rawSize: layer.rawSize,
       opacity: layer.opacity,
-      enableInteraction: layer.enableInteraction,
     );
   }
 }

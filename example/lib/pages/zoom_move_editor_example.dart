@@ -9,23 +9,7 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 import '../utils/example_constants.dart';
 import '../utils/example_helper.dart';
 
-/// A widget that demonstrates zoom and move functionality within an editor.
-///
-/// The [ZoomMoveEditorExample] widget is a stateful widget that provides an
-/// example of how to implement zooming and moving features, likely within an
-/// image editor or a similar application that requires user interaction for
-/// manipulating content.
-///
-/// This widget holds the state, and the state class
-/// [_ZoomMoveEditorExampleState]
-/// will contain the logic to handle zoom and move gestures.
-///
-/// Example usage:
-/// ```dart
-/// ZoomMoveEditorExample();
-/// ```
 class ZoomMoveEditorExample extends StatefulWidget {
-  /// Creates a new [ZoomMoveEditorExample] widget.
   const ZoomMoveEditorExample({super.key});
 
   @override
@@ -41,7 +25,7 @@ class _ZoomMoveEditorExampleState extends State<ZoomMoveEditorExample>
         await precacheImage(
             AssetImage(ExampleConstants.of(context)!.demoAssetPath), context);
         if (!context.mounted) return;
-        await Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => _buildEditor(),
@@ -66,16 +50,10 @@ class _ZoomMoveEditorExampleState extends State<ZoomMoveEditorExample>
       configs: ProImageEditorConfigs(
         designMode: platformDesignMode,
         mainEditorConfigs: const MainEditorConfigs(
-          enableZoom: true,
-          editorMinScale: 0.8,
-          editorMaxScale: 5,
-          boundaryMargin: EdgeInsets.all(100),
+          editorIsZoomable: true,
         ),
         paintEditorConfigs: const PaintEditorConfigs(
-          enableZoom: true,
-          editorMinScale: 0.8,
-          editorMaxScale: 5,
-          boundaryMargin: EdgeInsets.all(100),
+          editorIsZoomable: true,
         ),
         icons: const ImageEditorIcons(
           paintingEditor: IconsPaintingEditor(

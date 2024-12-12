@@ -16,21 +16,8 @@ import '../../widgets/bottom_sheets_header_row.dart';
 import '../../widgets/platform_popup_menu.dart';
 import 'widgets/text_editor_bottom_bar.dart';
 
-/// A StatefulWidget that provides a text editing interface for adding and
-/// editing text layers.
+/// A StatefulWidget that provides a text editing interface for adding and editing text layers.
 class TextEditor extends StatefulWidget with SimpleConfigsAccess {
-  /// Creates a `TextEditor` widget.
-  ///
-  /// The [heroTag], [layer], [i18n], [customWidgets], and [imageEditorTheme]
-  /// parameters are required.
-  const TextEditor({
-    super.key,
-    this.heroTag,
-    this.layer,
-    this.callbacks = const ProImageEditorCallbacks(),
-    this.configs = const ProImageEditorConfigs(),
-    required this.theme,
-  });
   @override
   final ProImageEditorConfigs configs;
 
@@ -46,6 +33,18 @@ class TextEditor extends StatefulWidget with SimpleConfigsAccess {
   /// The text layer data to be edited, if any.
   final TextLayerData? layer;
 
+  /// Creates a `TextEditor` widget.
+  ///
+  /// The [heroTag], [layer], [i18n], [customWidgets], and [imageEditorTheme] parameters are required.
+  const TextEditor({
+    super.key,
+    this.heroTag,
+    this.layer,
+    this.callbacks = const ProImageEditorCallbacks(),
+    this.configs = const ProImageEditorConfigs(),
+    required this.theme,
+  });
+
   @override
   createState() => TextEditorState();
 }
@@ -56,29 +55,16 @@ class TextEditorState extends State<TextEditor>
         ImageEditorConvertedConfigs,
         ImageEditorConvertedCallbacks,
         SimpleConfigsAccessState {
-  late final StreamController<void> _rebuildController;
+  late final StreamController _rebuildController;
 
-  /// Controller for managing text input.
   final TextEditingController textCtrl = TextEditingController();
-
-  /// Node for managing focus on the text input.
   final FocusNode focusNode = FocusNode();
 
-  /// Alignment of the text.
   late TextAlign align;
-
-  /// Style applied to the selected text.
   late TextStyle selectedTextStyle;
-
-  /// Mode for managing the background color of the text layer.
   late LayerBackgroundMode backgroundColorMode;
 
-  /// Position of the color picker.
   double colorPosition = 0;
-
-  /// Represents the dimensions of the body.
-  Size editorBodySize = Size.infinite;
-
   late double _fontScale;
 
   Color _primaryColor = Colors.black;
@@ -251,8 +237,7 @@ class TextEditorState extends State<TextEditor>
 
   /// Displays a range slider for adjusting the line width of the painting tool.
   ///
-  /// This method shows a range slider in a modal bottom sheet for adjusting the
-  /// line width of the painting tool.
+  /// This method shows a range slider in a modal bottom sheet for adjusting the line width of the painting tool.
   void openFontScaleBottomSheet() {
     final presetFontScale = _fontScale;
     showModalBottomSheet(
@@ -357,8 +342,7 @@ class TextEditorState extends State<TextEditor>
     textEditorCallbacks?.handleCloseEditor();
   }
 
-  /// Handles the "Done" action, either by applying changes or closing the
-  /// editor.
+  /// Handles the "Done" action, either by applying changes or closing the editor.
   void done() {
     if (textCtrl.text.trim().isNotEmpty) {
       Navigator.of(context).pop(
@@ -384,23 +368,15 @@ class TextEditorState extends State<TextEditor>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return ExtendedPopScope(
-          child: Theme(
-            data: widget.theme.copyWith(
-                tooltipTheme:
-                    widget.theme.tooltipTheme.copyWith(preferBelow: true)),
-            child: SafeArea(
-              top: textEditorConfigs.safeArea.top,
-              bottom: textEditorConfigs.safeArea.bottom,
-              left: textEditorConfigs.safeArea.left,
-              right: textEditorConfigs.safeArea.right,
-              child: Scaffold(
-                backgroundColor: imageEditorTheme.textEditor.background,
-                appBar: _buildAppBar(constraints),
-                body: _buildBody(),
-                bottomNavigationBar: _buildBottomBar(),
-              ),
-            ),
+        return Theme(
+          data: widget.theme.copyWith(
+              tooltipTheme:
+                  widget.theme.tooltipTheme.copyWith(preferBelow: true)),
+          child: Scaffold(
+            backgroundColor: imageEditorTheme.textEditor.background,
+            appBar: _buildAppBar(constraints),
+            body: _buildBody(),
+            bottomNavigationBar: _buildBottomBar(),
           ),
         );
       },
@@ -505,37 +481,33 @@ class TextEditorState extends State<TextEditor>
 
   /// Builds the body of the text editor.
   Widget _buildBody() {
-    return LayoutBuilder(builder: (_, constraints) {
-      editorBodySize = constraints.biggest;
-
-      return GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: done,
-        child: Stack(
-          children: [
-            if (customWidgets.textEditor.bodyItems != null)
-              ...customWidgets.textEditor.bodyItems!(
-                this,
-                _rebuildController.stream,
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: done,
+      child: Stack(
+        children: [
+          if (customWidgets.textEditor.bodyItems != null)
+            ...customWidgets.textEditor.bodyItems!(
+              this,
+              _rebuildController.stream,
+            ),
+          _buildTextField(),
+          _buildColorPicker(),
+          if (textEditorConfigs.showSelectFontStyleBottomBar)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: kBottomNavigationBarHeight,
+              child: TextEditorBottomBar(
+                configs: widget.configs,
+                selectedStyle: selectedTextStyle,
+                onFontChange: setTextStyle,
               ),
-            _buildTextField(),
-            _buildColorPicker(),
-            if (textEditorConfigs.showSelectFontStyleBottomBar)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: kBottomNavigationBarHeight,
-                child: TextEditorBottomBar(
-                  configs: widget.configs,
-                  selectedStyle: selectedTextStyle,
-                  onFontChange: setTextStyle,
-                ),
-              ),
-          ],
-        ),
-      );
-    });
+            ),
+        ],
+      ),
+    );
   }
 
   List<IconButton> _getConfigButtons() => [
@@ -626,8 +598,7 @@ class TextEditorState extends State<TextEditor>
   /// Builds the text field for text input.
   Widget _buildTextField() {
     return Center(
-      ///  TODO: remove `IntrinsicWidth` after updating
-      /// `RoundedBackgroundTextField` code
+      // TODO: remove `IntrinsicWidth` after updating `RoundedBackgroundTextField` code
       child: IntrinsicWidth(
         child: Padding(
           padding: imageEditorTheme.textEditor.textFieldMargin,
@@ -699,8 +670,8 @@ class TextEditorState extends State<TextEditor>
                     shadows: [],
                   ),
 
-                  /// If we edit an layer we focus to the textfield after the
-                  /// hero animation is done
+                  /// If we edit an layer we focus to the textfield after the hero
+                  /// animation is done
                   autofocus: widget.layer == null,
                 ),
               ),

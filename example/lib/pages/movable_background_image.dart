@@ -20,19 +20,17 @@ import '../utils/example_helper.dart';
 import '../utils/pixel_transparent_painter.dart';
 import 'reorder_layer_example.dart';
 
-/// The example for movableBackground
-class MovableBackgroundImageExample extends StatefulWidget {
-  /// Creates a new [MovableBackgroundImageExample] widget.
-  const MovableBackgroundImageExample({super.key});
+class MoveableBackgroundImageExample extends StatefulWidget {
+  const MoveableBackgroundImageExample({super.key});
 
   @override
-  State<MovableBackgroundImageExample> createState() =>
-      _MovableBackgroundImageExampleState();
+  State<MoveableBackgroundImageExample> createState() =>
+      _MoveableBackgroundImageExampleState();
 }
 
-class _MovableBackgroundImageExampleState
-    extends State<MovableBackgroundImageExample>
-    with ExampleHelperState<MovableBackgroundImageExample> {
+class _MoveableBackgroundImageExampleState
+    extends State<MoveableBackgroundImageExample>
+    with ExampleHelperState<MoveableBackgroundImageExample> {
   late final ScrollController _bottomBarScrollCtrl;
   late Uint8List _transparentBytes;
   double _transparentAspectRatio = -1;
@@ -98,7 +96,7 @@ class _MovableBackgroundImageExampleState
     }
 
     if (!kIsWeb && Platform.isIOS) {
-      await showCupertinoModalPopup(
+      showCupertinoModalPopup(
         context: context,
         builder: (BuildContext context) => CupertinoTheme(
           data: const CupertinoThemeData(),
@@ -138,7 +136,7 @@ class _MovableBackgroundImageExampleState
         ),
       );
     } else {
-      await showModalBottomSheet(
+      showModalBottomSheet(
         context: context,
         showDragHandle: true,
         constraints: BoxConstraints(
@@ -212,34 +210,17 @@ class _MovableBackgroundImageExampleState
             kBottomNavigationBarHeight -
             MediaQuery.of(context).padding.vertical,
       );
-
-  void _openReorderSheet(ProImageEditorState editor) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return ReorderLayerSheet(
-          layers: editor.activeLayers,
-          onReorder: (oldIndex, newIndex) {
-            editor.moveLayerListPosition(
-              oldIndex: oldIndex,
-              newIndex: newIndex,
-            );
-            Navigator.pop(context);
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () async {
-        LoadingDialog.instance.show(
+        LoadingDialog loading = LoadingDialog();
+        await loading.show(
           context,
           configs: const ProImageEditorConfigs(),
           theme: ThemeData.dark(),
         );
+
         double imgRatio = 1; // set the aspect ratio from your image.
 
         await _createTransparentImage(_editorSize.aspectRatio);
@@ -250,10 +231,10 @@ class _MovableBackgroundImageExampleState
             'https://picsum.photos/id/${Random().nextInt(200)}/2000';
         await precacheImage(NetworkImage(imageUrl), context);
 
-        LoadingDialog.instance.hide();
+        if (context.mounted) await loading.hide(context);
 
         if (!context.mounted) return;
-        await Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
@@ -326,14 +307,12 @@ class _MovableBackgroundImageExampleState
                   ),
                   configs: ProImageEditorConfigs(
                       designMode: platformDesignMode,
-                      imageGenerationConfigs: ImageGenerationConfigs(
+                      imageGenerationConfigs: ImageGeneratioConfigs(
                         captureOnlyDrawingBounds: true,
                         captureOnlyBackgroundImageArea: false,
                         outputFormat: OutputFormat.png,
 
-                        /// Set the pixel ratio manually. You can also set this
-                        /// value higher than the device pixel ratio for higher
-                        /// quality.
+                        /// Set the pixel ratio manually. You can also set this value higher than the device pixel ratio for higher quality.
                         customPixelRatio: max(
                             2000 / MediaQuery.of(context).size.width,
                             MediaQuery.of(context).devicePixelRatio),
@@ -347,51 +326,67 @@ class _MovableBackgroundImageExampleState
                       blurEditorConfigs:
                           const BlurEditorConfigs(enabled: false),
                       customWidgets: ImageEditorCustomWidgets(
-                        mainEditor: CustomWidgetsMainEditor(
-                          bodyItems: (editor, rebuildStream) {
-                            return [
-                              ReactiveCustomWidget(
-                                stream: rebuildStream,
-                                builder: (_) => editor.selectedLayerIndex >=
-                                            0 ||
-                                        editor.isSubEditorOpen
-                                    ? const SizedBox.shrink()
-                                    : Positioned(
-                                        bottom: 20,
-                                        left: 0,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.lightBlue.shade200,
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              topRight: Radius.circular(100),
-                                              bottomRight: Radius.circular(100),
-                                            ),
+                          mainEditor: CustomWidgetsMainEditor(
+                        bodyItems: (editor, rebuildStream) {
+                          return [
+                            ReactiveCustomWidget(
+                              stream: rebuildStream,
+                              builder: (_) => editor.selectedLayerIndex >= 0 ||
+                                      editor.isSubEditorOpen
+                                  ? const SizedBox.shrink()
+                                  : Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.lightBlue.shade200,
+                                          borderRadius: const BorderRadius.only(
+                                            topRight: Radius.circular(100),
+                                            bottomRight: Radius.circular(100),
                                           ),
-                                          child: IconButton(
-                                            onPressed: () =>
-                                                _openReorderSheet(editor),
-                                            icon: const Icon(
-                                              Icons.reorder,
-                                              color: Colors.white,
-                                            ),
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) {
+                                                return ReorderLayerSheet(
+                                                  layers: editor.activeLayers,
+                                                  onReorder:
+                                                      (oldIndex, newIndex) {
+                                                    editor
+                                                        .moveLayerListPosition(
+                                                      oldIndex: oldIndex,
+                                                      newIndex: newIndex,
+                                                    );
+                                                    Navigator.pop(context);
+                                                  },
+                                                );
+                                              },
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.reorder,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),
-                              ),
-                            ];
-                          },
-                          bottomBar: (editor, rebuildStream, key) =>
-                              ReactiveCustomWidget(
-                            stream: rebuildStream,
-                            key: key,
-                            builder: (_) => _bottomNavigationBar(
-                              editor,
-                              constraints,
+                                    ),
                             ),
-                          ),
-                        ),
-                      ),
+                          ];
+                        },
+                        bottomBar: (editor, rebuildStream, key) =>
+                            editor.selectedLayerIndex < 0
+                                ? ReactiveCustomWidget(
+                                    stream: rebuildStream,
+                                    key: key,
+                                    builder: (_) => _bottomNavigationBar(
+                                      editor,
+                                      constraints,
+                                    ),
+                                  )
+                                : null,
+                      )),
                       imageEditorTheme: const ImageEditorTheme(
                         uiOverlayStyle: SystemUiOverlayStyle(
                           statusBarColor: Colors.black,
@@ -401,13 +396,9 @@ class _MovableBackgroundImageExampleState
                             PaintingEditorTheme(background: Colors.transparent),
 
                         /// Optionally remove background
-                        /// cropRotateEditor:
-                        ///   CropRotateEditorTheme(background:
-                        ///                                 Colors.transparent),
-                        /// filterEditor:
-                        ///   FilterEditorTheme(background: Colors.transparent),
-                        /// blurEditor:
-                        ///   BlurEditorTheme(background: Colors.transparent),
+                        /// cropRotateEditor: CropRotateEditorTheme(background: Colors.transparent),
+                        /// filterEditor: FilterEditorTheme(background: Colors.transparent),
+                        /// blurEditor: BlurEditorTheme(background: Colors.transparent),
                       ),
                       stickerEditorConfigs: StickerEditorConfigs(
                         enabled: false,
@@ -442,7 +433,7 @@ class _MovableBackgroundImageExampleState
       scrollbarOrientation: ScrollbarOrientation.top,
       thickness: isDesktop ? null : 0,
       child: BottomAppBar(
-        /// kBottomNavigationBarHeight is important that helper-lines will work
+        /// kBottomNavigationBarHeight is important that helperlines will work
         height: kBottomNavigationBarHeight,
         color: Colors.black,
         padding: EdgeInsets.zero,

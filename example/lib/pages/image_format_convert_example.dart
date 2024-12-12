@@ -12,9 +12,7 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 import '../utils/example_constants.dart';
 import '../utils/example_helper.dart';
 
-/// The image-format-convert example
 class ImageFormatConvertExample extends StatefulWidget {
-  /// Creates a new [ImageFormatConvertExample] widget.
   const ImageFormatConvertExample({super.key});
 
   @override
@@ -57,7 +55,7 @@ class _ImageFormatConvertExampleState extends State<ImageFormatConvertExample>
         await precacheImage(
             AssetImage(ExampleConstants.of(context)!.demoAssetPath), context);
         if (!context.mounted) return;
-        await Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => _buildEditor(),
@@ -89,9 +87,9 @@ class _ImageFormatConvertExampleState extends State<ImageFormatConvertExample>
       ),
       configs: ProImageEditorConfigs(
         designMode: platformDesignMode,
-        imageGenerationConfigs: const ImageGenerationConfigs(
+        imageGenerationConfigs: const ImageGeneratioConfigs(
           /// Choose the output format below
-          outputFormat: kIsWeb ? OutputFormat.png : OutputFormat.tiff,
+          outputFormat: OutputFormat.tiff,
           pngFilter: PngFilter.none,
           pngLevel: 6,
           jpegChroma: JpegChroma.yuv444,

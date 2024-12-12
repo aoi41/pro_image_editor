@@ -9,32 +9,13 @@ import 'package:pro_image_editor/pro_image_editor.dart';
 import '../utils/example_constants.dart';
 import '../utils/example_helper.dart';
 
-/// A widget that demonstrates the ability to reorder layers within a UI.
-///
-/// The [ReorderLayerExample] widget is a stateful widget that allows users
-/// to reorder different layers, typically used in applications like image
-/// or graphic editors. This feature enables users to adjust the stacking
-/// order of layers for better control over the composition.
-///
-/// The state for this widget is managed by the [_ReorderLayerExampleState]
-/// class.
-///
-/// Example usage:
-/// ```dart
-/// ReorderLayerExample();
-/// ```
 class ReorderLayerExample extends StatefulWidget {
-  /// Creates a new [ReorderLayerExample] widget.
   const ReorderLayerExample({super.key});
 
   @override
   State<ReorderLayerExample> createState() => _ReorderLayerExampleState();
 }
 
-/// The state for the [ReorderLayerExample] widget.
-///
-/// This class manages the logic and state required for reordering layers
-/// within the [ReorderLayerExample] widget.
 class _ReorderLayerExampleState extends State<ReorderLayerExample>
     with ExampleHelperState<ReorderLayerExample> {
   @override
@@ -44,7 +25,7 @@ class _ReorderLayerExampleState extends State<ReorderLayerExample>
         await precacheImage(
             AssetImage(ExampleConstants.of(context)!.demoAssetPath), context);
         if (!context.mounted) return;
-        await Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => _buildEditor(),
@@ -123,53 +104,20 @@ class _ReorderLayerExampleState extends State<ReorderLayerExample>
   }
 }
 
-/// A widget that provides a sheet for reordering layers.
-///
-/// The [ReorderLayerSheet] widget allows users to view and reorder a list of
-/// layers within an application. It is typically used in scenarios where the
-/// user needs to manage the stacking order of different layers, such as in
-/// an image or graphic editor.
-///
-/// This widget requires a list of [Layer] objects and a [ReorderCallback]
-/// function to handle the reorder logic.
-///
-/// The state for this widget is managed by the [_ReorderLayerSheetState] class.
-///
-/// Example usage:
-/// ```dart
-/// ReorderLayerSheet(
-///   layers: myLayers,
-///   onReorder: (oldIndex, newIndex) { /* reorder logic */ },
-/// );
-/// ```
 class ReorderLayerSheet extends StatefulWidget {
-  /// Creates a new [ReorderLayerSheet] widget.
-  ///
-  /// The [layers] parameter is required and represents the list of layers
-  /// that can be reordered. The [onReorder] callback is required to handle
-  /// the logic when layers are reordered.
+  final List<Layer> layers;
+  final ReorderCallback onReorder;
+
   const ReorderLayerSheet({
     super.key,
     required this.layers,
     required this.onReorder,
   });
 
-  /// A list of [Layer] objects that can be reordered by the user.
-  final List<Layer> layers;
-
-  /// A callback that is triggered when the user reorders the layers.
-  /// This function receives the [oldIndex] and [newIndex] to indicate
-  /// how the layers were reordered.
-  final ReorderCallback onReorder;
-
   @override
   State<ReorderLayerSheet> createState() => _ReorderLayerSheetState();
 }
 
-/// The state for the [ReorderLayerSheet] widget.
-///
-/// This class manages the logic and state required for displaying and
-/// interacting with the reorderable list of layers.
 class _ReorderLayerSheetState extends State<ReorderLayerSheet> {
   @override
   Widget build(BuildContext context) {
