@@ -1867,9 +1867,9 @@ class ProImageEditorState extends State<ProImageEditor>
                       onPressed: doneEditing,
                     ),*/
                     GestureDetector(
+                      key: const ValueKey('MainEditorDoneButton'),
                       onTap: doneEditing,
                       child: Container(
-                        key: const ValueKey('MainEditorDoneButton'),
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         margin: const EdgeInsets.only(right: 15),
                         decoration: BoxDecoration(
